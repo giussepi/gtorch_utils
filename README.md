@@ -2,7 +2,7 @@
 
 Some useful pytorch snippets
 
-# Installation
+## Installation
 
 1. Install package
 
@@ -19,3 +19,14 @@ Some useful pytorch snippets
 	```
 
 2. If you haven't done it yet. [Install the right pytorch version](https://pytorch.org/).
+
+
+## Usage
+
+Explore the modules, load snippets and have fun! :blush::bowtie::nerd_face: E.g.:
+
+```python
+	from gtorch_utils.models.perceptrons import Perceptron
+
+	model = Perceptron(3000, 102)
+```
