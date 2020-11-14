@@ -1,4 +1,4 @@
 # Links to packages not published on PyPI
 
-# git+git://github.com/giussepi/gutils.git
-https://github.com/giussepi/gutils/tarball/master
+git+git://github.com/giussepi/gutils.git
+# https://github.com/giussepi/gutils/tarball/master
