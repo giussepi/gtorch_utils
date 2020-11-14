@@ -33,4 +33,5 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     install_requires=_parse_requirements('requirements.txt'),
+    dependency_links=_parse_requirements('requirements_links.txt'),
 )
