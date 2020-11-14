@@ -17,7 +17,6 @@ def _parse_requirements(filename: str) -> List[str]:
 
 
 setuptools.setup(
-    # name="gtorch-utils-pkg-giussepi",  # Replace with your own username
     name="gtorch-utils-pkg-giussepi",  # Replace with your own username
     version="0.0.1",
     author="Giussepi Lopez",
