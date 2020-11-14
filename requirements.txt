@@ -1,3 +1,5 @@
+git+git://github.com/giussepi/gutils.git
+
 # emacs as python editor
 autopep8>=1.5.4
 ipython>=7.16.1
