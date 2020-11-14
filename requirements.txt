@@ -1,4 +1,5 @@
-git+git://github.com/giussepi/gutils.git
+# git+git://github.com/giussepi/gutils.git
+https://github.com/giussepi/gutils/tarball/master
 
 # emacs as python editor
 autopep8>=1.5.4
