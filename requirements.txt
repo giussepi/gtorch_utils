@@ -1,6 +1,6 @@
 # git+git://github.com/giussepi/gutils.git
 # https://github.com/giussepi/gutils/tarball/master
-git@https://github.com/giussepi/gutils/tarball/master#egg=gutils
+pip@https://github.com/giussepi/gutils/tarball/master
 
 # emacs as python editor
 autopep8>=1.5.4
