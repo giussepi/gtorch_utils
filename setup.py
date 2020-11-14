@@ -17,7 +17,8 @@ def _parse_requirements(filename: str) -> List[str]:
 
 
 setuptools.setup(
-    name="gtorch-utils-pkg-giussepi",  # Replace with your own username
+    # name="gtorch-utils-pkg-giussepi",  # Replace with your own username
+    name="gtorch_utils",
     version="0.0.1",
     author="Giussepi Lopez",
     author_email="giussepexy@gmail.com",
@@ -33,5 +34,4 @@ setuptools.setup(
     ],
     python_requires='>=3.6',
     install_requires=_parse_requirements('requirements.txt'),
-    # dependency_links=_parse_requirements('requirements_links.txt'),
 )

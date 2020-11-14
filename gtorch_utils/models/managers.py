@@ -44,7 +44,7 @@ class ModelMGR:
         kwargs:
             model (nn.Module): model instance
             cuda (bool): whether or not use cuda
-            dataset (BaseDataset): Custom dataset class descendant of gtorch_utilsdatasetsgeneric.BaseDataset. Also see https://pytorch.org/tutorials/beginner/data_loading_tutorial.html
+            dataset (BaseDataset): Custom dataset class descendant of gtorch_utils.datasets.generic.BaseDataset. Also see https://pytorch.org/tutorials/beginner/data_loading_tutorial.html#dataset-class
             dataset_kwargs (dict): keyword arguments for the dataset
             batch_size (int): how many samples per batch to load
             shuffle (bool):  set to True to have the data reshuffled at every epoch
