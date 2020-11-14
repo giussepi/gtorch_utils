@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """ gtorch_utils/models/managers """
 
-
 import os
 import warnings
 from collections import OrderedDict

@@ -9,17 +9,17 @@ Some useful pytorch snippets
 	Add to your requirements file:
 
 	``` bash
-	gtorch_utils @ https://github.com/giussepi/gtorch_utils/tarball/master
+	gtorch_utils @ https://github.com/giussepi/gtorch_utils/tarball/main
 	```
 
 	or run
 
 	``` bash
-	pip install git+git://github.com/giussepi/gtorch_utils.git
+	pip install git+git://github.com/giussepi/gtorch_utils.git --use-feature=2020-resolver --no-cache-dir
 
 	# or
 
-	pip install https://github.com/giussepi/gtorch_utils/tarball/master
+	pip install https://github.com/giussepi/gtorch_utils/tarball/main --use-feature=2020-resolver --no-cache-dir
 	```
 
 2. If you haven't done it yet. [Install the right pytorch version](https://pytorch.org/).
@@ -27,13 +27,16 @@ Some useful pytorch snippets
 
 ## Usage
 
-Explore the modules, load snippets and have fun! :blush::bowtie::nerd_face: E.g.:
+All the classes and functions are fully document so explore the modules, load snippets and have fun! :blush::bowtie::nerd_face: E.g.:
 
 ```python
 from gtorch_utils.models.perceptrons import Perceptron
 from gtorch_utils.models.managers import  ModelMGR
 
 model = Perceptron(3000, 102)
+
+# GenericDataset is subclass of gtorch_utils.datasets.generic.BaseDataset that you must implement
+# to handle your dataset. You can pass argument to your class using dataset_kwargs
 
 ModelMGR(
     cuda=True,

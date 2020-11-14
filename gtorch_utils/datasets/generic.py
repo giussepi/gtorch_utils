@@ -34,7 +34,6 @@ class BaseDataset(Dataset):
     def __getitem__(self, idx):
         """
         Returns:
-
             dict(feats=..., label=...)
         """
         raise NotImplementedError
