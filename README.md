@@ -22,7 +22,7 @@ Some useful pytorch snippets
 	pip install https://github.com/giussepi/gtorch_utils/tarball/main --use-feature=2020-resolver --no-cache-dir
 	```
 
-2. If you haven't done it yet. [Install the right pytorch version](https://pytorch.org/).
+2. If you haven't done it yet. [Install the right pytorch version](https://pytorch.org/) for your CUDA vesion. To see your which CUDA version you have just run `nvcc -V`.
 
 
 ## Usage
