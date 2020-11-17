@@ -30,10 +30,8 @@ Some useful pytorch snippets
 All the classes and functions are fully document so explore the modules, load snippets and have fun! :blush::bowtie::nerd_face: E.g.:
 
 ```python
-from gtorch_utils.models.perceptrons import Perceptron
 from gtorch_utils.models.managers import  ModelMGR
-
-model = Perceptron(3000, 102)
+from gtorch_utils.models.perceptrons import Perceptron
 
 # GenericDataset is subclass of gtorch_utils.datasets.generic.BaseDataset that you must implement
 # to handle your dataset. You can pass argument to your class using dataset_kwargs
