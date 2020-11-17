@@ -24,6 +24,7 @@ class ModelMGR:
         ModelMGR(
             cuda=True,
             model=Perceptron(3000, 102),
+            sub_datasets=DB,
             dataset=GenericDataset,
             dataset_kwargs=dict(dbhandler=DBhandler, normalizer=Normalizer.MAX_NORM, val_size=.1),
             batch_size=6,
@@ -41,13 +42,16 @@ class ModelMGR:
     def __init__(self, **kwargs):
         """
         kwargs:
-            model (nn.Module): model instance
             cuda (bool): whether or not use cuda
+            model (nn.Module): model instance
+            sub_datasets (class): class containing the subdatasets. See
+                                  gtorch_utils.models.constants.DB class definition
             dataset (BaseDataset): Custom dataset class descendant of gtorch_utils.datasets.generic.BaseDataset. Also see https://pytorch.org/tutorials/beginner/data_loading_tutorial.html#dataset-class
             dataset_kwargs (dict): keyword arguments for the dataset
             batch_size (int): how many samples per batch to load
             shuffle (bool):  set to True to have the data reshuffled at every epoch
-            num_workers (int): how many subprocesses to use for data loading. 0 means that the data will be loaded in the main process.
+            num_workers (int): how many subprocesses to use for data loading. 0 means that
+                               the data will be loaded in the main process.
             optimizer: optimizer class from torch.optim
             optimizer_kwargs: optimizer keyword arguments
             lr_scheduler: one learing rate scheuler from torch.optim.lr_scheduler
@@ -59,6 +63,7 @@ class ModelMGR:
         """
         self.cuda = kwargs.get('cuda', True)
         self.model = kwargs.get('model')
+        self.sub_datasets = kwargs.get('sub_datasets', DB)
         self.dataset = kwargs.get('dataset')
         self.dataset_kwargs = kwargs.get('dataset_kwargs', {})
         self.batch_size = kwargs.get('batch_size', 1)  # 6
@@ -92,9 +97,9 @@ class ModelMGR:
 
         self.model.to(self.device)
 
-        self.train_loader = self.get_subdataset(DB.TRAIN)
-        self.val_loader = self.get_subdataset(DB.VALIDATION)
-        self.test_loader = self.get_subdataset(DB.TEST)
+        self.train_loader = self.get_subdataset(self.sub_datasets.TRAIN)
+        self.val_loader = self.get_subdataset(self.sub_datasets.VALIDATION)
+        self.test_loader = self.get_subdataset(self.sub_datasets.TEST)
 
     def __call__(self, **kwargs):
         """ functor call """
@@ -118,7 +123,7 @@ class ModelMGR:
         Returns:
             Dataloader
         """
-        assert sub_dataset in DB.SUB_DATASETS
+        assert sub_dataset in self.sub_datasets.SUB_DATASETS
         dataset = self.dataset(sub_dataset, **self.dataset_kwargs)
         assert isinstance(dataset, BaseDataset)
 

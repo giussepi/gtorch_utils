@@ -30,6 +30,10 @@ Some useful pytorch snippets
 All the classes and functions are fully document so explore the modules, load snippets and have fun! :blush::bowtie::nerd_face: E.g.:
 
 ```python
+from collections import OrderedDict
+
+import torch.optim as optim
+from gtorch_utils.constants import DB
 from gtorch_utils.models.managers import  ModelMGR
 from gtorch_utils.models.perceptrons import Perceptron
 
@@ -39,6 +43,7 @@ from gtorch_utils.models.perceptrons import Perceptron
 ModelMGR(
     cuda=True,
     model=Perceptron(3000, 102),
+    sub_datasets=DB,
     dataset=GenericDataset,
     dataset_kwargs=dict(dbhandler=DBhandler, normalizer=Normalizer.MAX_NORM, val_size=.1),
     batch_size=6,
