@@ -209,7 +209,7 @@ class ModelMGR:
                 epoch+1, train_loss, val_loss))
 
             writer.add_scalars(
-                'Train and validation loss', {'Train': train_loss, 'Validation': val_loss})
+                'loss: Train & Validation', {'Train': train_loss, 'Validation': val_loss}, epoch)
 
             # save model if validation loss has decreased
             if val_loss < val_loss_min:
