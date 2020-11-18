@@ -211,15 +211,15 @@ class ModelMGR:
             writer.add_scalars(
                 'loss: Train & Validation', {'Train': train_loss, 'Validation': val_loss}, epoch)
 
+            if earlystopping(val_loss, val_loss_min):
+                break
+
             # save model if validation loss has decreased
             if val_loss < val_loss_min:
                 print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
                     val_loss_min, val_loss))
                 self.save()
                 val_loss_min = val_loss
-
-            if earlystopping(val_loss, val_loss_min):
-                break
 
         writer.close()
         print('Training completed')
