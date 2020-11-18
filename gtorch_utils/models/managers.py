@@ -15,6 +15,7 @@ from torch.utils.data import DataLoader
 
 from gtorch_utils.constants import DB
 from gtorch_utils.datasets.generic import BaseDataset
+from gtorch_utils.models.callbacks import EarlyStopping
 
 
 class ModelMGR:
@@ -36,6 +37,7 @@ class ModelMGR:
             lr_scheduler=None,
             lr_scheduler_kwargs=None,
             epochs=200,
+            earlystopping_kwargs=dict(min_delta=1e-2, patience=8),
             saving_details=OrderedDict(directory_path='tmp', filename='mymodel.pth')
         )()
     """
@@ -58,6 +60,7 @@ class ModelMGR:
             lr_scheduler: one learing rate scheuler from torch.optim.lr_scheduler
             lr_scheduler_kwargs (dict): keyword arguments for lr_scheduler_class
             epochs (int): number of epochs
+            earlystopping_kwargs (dict): Early stopping parameters. See gtorch_utils.models.callbacks.EarlyStopping class definition
             saving_details (OrderedDict): Contains data to properly save the model. Items:
                 'directory_path': <path to the directory containing the model weights>
                 'filename'      : <name of the file containing the model weights>.pth
@@ -75,6 +78,7 @@ class ModelMGR:
         self.lr_scheduler = kwargs.get('lr_scheduler', None)
         self.lr_scheduler_kwargs = kwargs.get('lr_scheduler_kwargs', {})
         self.epochs = kwargs.get('epochs', 200)
+        self.earlystopping_kwargs = kwargs.get('earlystopping_kwargs', dict(min_delta=1e-2, patience=8))
         self.saving_details = kwargs.get(
             'saving_details', OrderedDict(directory_path='tmp', filename='mymodel.pth'))
 
@@ -87,6 +91,7 @@ class ModelMGR:
         assert isinstance(self.optimizer_kwargs, dict)
         assert isinstance(self.lr_scheduler_kwargs, dict)
         assert self.epochs > 0
+        assert isinstance(self.earlystopping_kwargs, dict)
         assert isinstance(self.saving_details, OrderedDict)
 
         if self.cuda:
@@ -147,6 +152,7 @@ class ModelMGR:
         writer = SummaryWriter()
         criterion = nn.CrossEntropyLoss()
         optimizer = self.optimizer(self.model.parameters(), **self.optimizer_kwargs)
+        earlystopping = EarlyStopping(**self.earlystopping_kwargs)
 
         if self.lr_scheduler is not None:
             scheduler = self.lr_scheduler(optimizer, **self.lr_scheduler_kwargs)
@@ -206,11 +212,14 @@ class ModelMGR:
                 'Train and validation loss', {'Train': train_loss, 'Validation': val_loss})
 
             # save model if validation loss has decreased
-            if val_loss <= val_loss_min:
+            if val_loss < val_loss_min:
                 print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
                     val_loss_min, val_loss))
                 self.save()
                 val_loss_min = val_loss
+
+            if earlystopping(val_loss, val_loss_min):
+                break
 
         writer.close()
         print('Training completed')

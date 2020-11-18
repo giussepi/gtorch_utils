@@ -54,6 +54,11 @@ ModelMGR(
     lr_scheduler=None,
     lr_scheduler_kwargs={},
     epochs=200,
+	earlystopping_kwargs=dict(min_delta=1e-2, patience=8),
     saving_details=OrderedDict(directory_path='tmp', filename='mymodel.pth')
 )()
 ```
+
+# TODO
+- [ ] Save load checkpoint
+- [x] Early stopping callback
