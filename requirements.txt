@@ -1,4 +1,6 @@
 gutils @ https://github.com/giussepi/gutils/tarball/master
+tensorboardX>=2.1
+tensorboard>=2.4.0
 
 # emacs as python editor
 autopep8>=1.5.4

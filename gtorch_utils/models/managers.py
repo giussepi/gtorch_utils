@@ -10,6 +10,7 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from gutils.decorators import timing
+from tensorboardX import SummaryWriter
 from torch.utils.data import DataLoader
 
 from gtorch_utils.constants import DB
@@ -143,6 +144,7 @@ class ModelMGR:
             print_mini_batches (int): number of mini batches to count before
                                       calculating and printing the loss
         """
+        writer = SummaryWriter()
         criterion = nn.CrossEntropyLoss()
         optimizer = self.optimizer(self.model.parameters(), **self.optimizer_kwargs)
 
@@ -200,6 +202,9 @@ class ModelMGR:
             print('Epoch: {} \tTraining Loss: {:.6f} \tValidation Loss: {:.6f}'.format(
                 epoch+1, train_loss, val_loss))
 
+            writer.add_scalars(
+                'Train and validation loss', {'Train': train_loss, 'Validation': val_loss})
+
             # save model if validation loss has decreased
             if val_loss <= val_loss_min:
                 print('Validation loss decreased ({:.6f} --> {:.6f}).  Saving model ...'.format(
@@ -207,6 +212,7 @@ class ModelMGR:
                 self.save()
                 val_loss_min = val_loss
 
+        writer.close()
         print('Training completed')
 
     @timing
