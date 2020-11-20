@@ -59,6 +59,9 @@ Just pass to `ModelMGR` the keywrod argument `tensorboard=True` and execute:
 ./run_tensorboard.sh
 ```
 
+**Note:** If you installed this app as a package then you may want to copy the [run_tensorboard.sh](https://github.com/giussepi/gtorch_utils/blob/main/run_tensorboard.sh) script to your project root or just run `tensorboard --logdir=runs` every time you want to see your training results on the TensorBoard interface. To do so, just open [localhost:6006](http://localhost:6006/) on your browser.
+
+
 ## Development
 
 After adding new features + tests do not forget to run:
