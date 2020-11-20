@@ -17,7 +17,7 @@ class EarlyStopping:
         early_stopping(val_loss, val_loss_min)
     """
 
-    def __init__(self, min_delta=1e-2, patience=8):
+    def __init__(self, min_delta=1e-3, patience=8):
         """
         Initializes the instance
 
@@ -56,8 +56,8 @@ class EarlyStopping:
             self.counter += 1
 
             if self.counter >= self.patience:
-                logger.info("Early stopping applied after {} epochs without any improvement"
-                            .format(self.patience))
+                logger.info("Early stopping applied after {} epochs without any improvement above {}"
+                            .format(self.patience, self.min_delta))
                 return True
 
         return False
