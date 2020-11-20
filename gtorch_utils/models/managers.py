@@ -102,7 +102,7 @@ class ModelMGR:
         self.lr_scheduler = kwargs.get('lr_scheduler', None)
         self.lr_scheduler_kwargs = kwargs.get('lr_scheduler_kwargs', {})
         self.epochs = kwargs.get('epochs')
-        self.earlystopping_kwargs = kwargs.get('earlystopping_kwargs', dict(min_delta=1e-2, patience=8))
+        self.earlystopping_kwargs = kwargs.get('earlystopping_kwargs', dict(min_delta=1e-3, patience=8))
         self.checkpoints = kwargs.get('checkpoints', False)
         self.checkpoint_interval = kwargs.get('checkpoint_interval', 10)
         self.checkpoint_path = kwargs.get(
