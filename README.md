@@ -51,10 +51,27 @@ ModelMGR(
 )()
 ```
 
-# TODO
+### Plot train and validation loss to TensorBoard
+
+Just pass to `ModelMGR` the keywrod argument `tensorboard=True` and execute:
+
+```bash
+./run_tensorboard.sh
+```
+
+## Development
+
+After adding new features + tests do not forget to run:
+
+``` bash
+./run_tests.sh
+```
+
+## TODO
 
 - [ ] Implement double cross validation
 - [ ] Implement cross validation
+- [ ] Write more tests
 - [x] Save & load checkpoint
 - [x] Early stopping callback
 - [x] Plot train & val loss in tensorboard
