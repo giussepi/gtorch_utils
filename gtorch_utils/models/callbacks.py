@@ -56,8 +56,10 @@ class EarlyStopping:
             self.counter += 1
 
             if self.counter >= self.patience:
-                logger.info("Early stopping applied after {} epochs without any improvement above {}"
-                            .format(self.patience, self.min_delta))
+                logger.info(
+                    f"Early stopping applied after {self.patience} consecutive"
+                    " evaluations without any improvement above {self.min_delta}"
+                )
                 return True
 
         return False
