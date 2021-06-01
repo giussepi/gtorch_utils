@@ -58,7 +58,7 @@ class ConfusionMatrixMGR:
         Returns
             complement <torch.Tensor>
         """
-        return torch.ones(input_.size()) - input_
+        return 1 - input_
 
     @property
     def true_positives(self):
