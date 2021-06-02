@@ -30,11 +30,11 @@ class ConfusionMatrixMGR:
         assert len(targets.size()) >= 3, len(targets.size())
         assert predictions.size() == targets.size(), (predictions.size(), targets.size())
 
-        preds_unique_values = torch.unique(predictions)
+        preds_min, preds_max = predictions.min(), predictions.max()
         targets_unique_values = torch.unique(targets)
 
-        assert 0 <= preds_unique_values.min() <= 1, preds_unique_values.min()
-        assert 0 <= preds_unique_values.max() <= 1, preds_unique_values.max()
+        assert 0 <= preds_min <= 1, preds_min
+        assert 0 <= preds_max <= 1, preds_max
         assert len(targets_unique_values) == 2
         assert targets_unique_values.min() == 0, targets_unique_values.min()
         assert targets_unique_values.max() == 1, targets_unique_values.max()
