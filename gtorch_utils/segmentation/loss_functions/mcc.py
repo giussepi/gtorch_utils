@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" loss/mcc """
+""" gtorch_utils/segmentation/loss_functions/mcc """
 
 
 import torch

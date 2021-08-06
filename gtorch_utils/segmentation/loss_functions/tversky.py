@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" loss/tversky """
+""" gtorch_utils/segmentation/loss_functions/tversky """
 
 import torch
 from gtorch_utils.constants import EPSILON

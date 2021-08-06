@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" loss/focal  """
+""" gtorch_utils/segmentation/loss_functions/focal  """
 
 import torch
 
