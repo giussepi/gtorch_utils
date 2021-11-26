@@ -24,6 +24,50 @@ Some useful pytorch snippets
 
 2. If you haven't done it yet. [Install the right pytorch version](https://pytorch.org/) for your CUDA vesion. To see your which CUDA version you have just run `nvcc -V`.
 
+## Tools available
+### gtorch_utils/constants
+- DB
+- EPSILON
+
+### gtorch_utils/datasets/generic
+- BaseDataset
+
+### gtorch_utils/datasets/segmentation
+- HDF5Dataset
+
+### gtorch_utils/layers/regularizers
+- GaussianNoise
+
+### gtorch_utils/models/callbacks
+- Checkpoint
+- EarlyStopping
+- PlotTensorBoard
+
+### gtorch_utils/models/managers
+- ModelMGR
+
+### gtorch_utils/models/perceptrons
+- Perceptron
+- MLP
+
+### gtorch_utils/segmentation/confusion_matrix
+- ConfusionMatrixMGR
+
+### gtorch_utils/segmentation/loss_functions
+- FocalLoss
+- FPPV_Loss
+- FPR_Loss
+- MCC_Loss, MCCLoss
+- NPV_Loss
+- Recall_Loss
+- TverskyLoss
+
+### gtorch_utils/segmentation/metrics
+- fppv
+- fpr
+- npv
+- recall
+- RNPV
 
 ## Usage
 

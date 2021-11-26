@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" constants """
+""" gtorch_utils/constants """
 
 EPSILON = 1e-15
 
