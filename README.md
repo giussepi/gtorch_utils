@@ -32,6 +32,14 @@ Some useful pytorch snippets
 ### gtorch_utils/datasets/generic
 - BaseDataset
 
+### gtorch_utils/datasets/segmentation/base
+- DatasetTemplate
+- BasicDataset
+
+### gtorch_utils/datasets/segmentation/datasets/
+- CarvanaDataset
+- BrainTumorDataset
+
 ### gtorch_utils/datasets/segmentation
 - HDF5Dataset
 
