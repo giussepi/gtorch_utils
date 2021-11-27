@@ -46,7 +46,7 @@ Some useful pytorch snippets
 ### gtorch_utils/layers/regularizers
 - GaussianNoise
 
-### gtorch_utils/models/callbacks
+### gtorch_utils/models/managers/callbacks
 - Checkpoint
 - EarlyStopping
 - PlotTensorBoard

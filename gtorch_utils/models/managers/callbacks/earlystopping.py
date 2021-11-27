@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/models/callbacks """
+""" gtorch_utils/models/managers/callbacks """
 
 from decimal import Decimal
 

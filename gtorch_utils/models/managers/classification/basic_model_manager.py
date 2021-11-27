@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader
 
 from gtorch_utils.constants import DB
 from gtorch_utils.datasets.generic import BaseDataset
-from gtorch_utils.models.callbacks import EarlyStopping, Checkpoint, PlotTensorBoard
+from gtorch_utils.models.managers.callbacks import EarlyStopping, Checkpoint, PlotTensorBoard
 
 
 class BasicModelMGR:

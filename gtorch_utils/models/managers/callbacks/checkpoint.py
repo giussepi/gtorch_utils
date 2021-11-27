@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/models/callbacks/checkpoint """
+""" gtorch_utils/models/managers/callbacks/checkpoint """
 
 
 class Checkpoint:

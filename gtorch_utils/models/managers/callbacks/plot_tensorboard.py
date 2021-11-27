@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/models/callbacks/plot_tensorboard """
+""" gtorch_utils/models/managers/callbacks/plot_tensorboard """
 
 from logzero import logger
 from gutils.utils import get_random_string

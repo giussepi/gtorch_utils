@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/models/callbacks/test/test_checkpoint """
+""" gtorch_utils/models/managers/callbacks/test/test_checkpoint """
 
 import unittest
 
-from gtorch_utils.models.callbacks.checkpoint import Checkpoint
+from gtorch_utils.models.managers.callbacks.checkpoint import Checkpoint
 
 
 class Test_Checkpoint(unittest.TestCase):
