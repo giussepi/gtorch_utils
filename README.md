@@ -51,8 +51,8 @@ Some useful pytorch snippets
 - EarlyStopping
 - PlotTensorBoard
 
-### gtorch_utils/models/managers
-- ModelMGR
+### gtorch_utils/models/managers/classification
+- BasicModelMGR
 
 ### gtorch_utils/models/perceptrons
 - Perceptron

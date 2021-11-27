@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/models/managers """
+""" gtorch_utils/models/managers/classification/basic_model_manager """
 
 import os
 import warnings
@@ -17,14 +17,14 @@ from gtorch_utils.datasets.generic import BaseDataset
 from gtorch_utils.models.callbacks import EarlyStopping, Checkpoint, PlotTensorBoard
 
 
-class ModelMGR:
+class BasicModelMGR:
     """
     General model managers
 
     Usage:
 
         # Minimum configuration required
-        ModelMGR(
+        BasicModelMGR(
             model=Perceptron(3000, 102),
             dataset=GenericDataset,
             dataset_kwargs=dict(dbhandler=DBhandler, normalizer=Normalizer.MAX_NORM, val_size=.1),
@@ -32,7 +32,7 @@ class ModelMGR:
         )()
 
         # Full options
-        ModelMGR(
+        BasicModelMGR(
             cuda=True,
             model=Perceptron(3000, 102),
             sub_datasets=DB,
