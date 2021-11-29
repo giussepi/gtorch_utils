@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/models/managers/classification/basic_model_manager """
+""" gtorch_utils/nns/managers/classification/basic_model_manager """
 
 import os
 import warnings
@@ -14,7 +14,7 @@ from torch.utils.data import DataLoader
 
 from gtorch_utils.constants import DB
 from gtorch_utils.datasets.generic import BaseDataset
-from gtorch_utils.models.managers.callbacks import EarlyStopping, Checkpoint, PlotTensorBoard
+from gtorch_utils.nns.managers.callbacks import EarlyStopping, Checkpoint, PlotTensorBoard
 
 
 class BasicModelMGR:

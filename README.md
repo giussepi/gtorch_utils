@@ -43,21 +43,21 @@ Some useful pytorch snippets
 ### gtorch_utils/datasets/segmentation
 - HDF5Dataset
 
-### gtorch_utils/layers/regularizers
+### gtorch_utils/nns/layers/regularizers
 - GaussianNoise
 
-### gtorch_utils/models/managers/callbacks
+### gtorch_utils/nns/managers/callbacks
 - Checkpoint
 - EarlyStopping
 - PlotTensorBoard
 
-### gtorch_utils/models/managers/classification
+### gtorch_utils/nns/managers/classification
 - BasicModelMGR
 
-### gtorch_utils/models/managers/exceptions
+### gtorch_utils/nns/managers/exceptions
 - ModelMGRImageChannelsError
 
-### gtorch_utils/models/perceptrons
+### gtorch_utils/nns/models/classification
 - Perceptron
 - MLP
 
@@ -97,16 +97,16 @@ from collections import OrderedDict
 
 import torch.optim as optim
 from gtorch_utils.constants import DB
-from gtorch_utils.models.managers import  ModelMGR
-from gtorch_utils.models.perceptrons import Perceptron
+from gtorch_utils.nns.managers.classification import  BasicModelMGR
+from gtorch_utils.nns.models.classification import Perceptron
 
-# Minimum example, see all the ModelMGR options in its class definition at gtorch_utils/models/managers.py.
+# Minimum example, see all the BasicModelMGR options in its class definition at gtorch_utils/models/managers.py.
 
 # GenericDataset is subclass of gtorch_utils.datasets.generic.BaseDataset that you must implement
 # to handle your dataset. You can pass argument to your class using dataset_kwargs
 
 
-ModelMGR(
+BasicModelMGR(
     model=Perceptron(3000, 102),
     dataset=GenericDataset,
     dataset_kwargs=dict(dbhandler=DBhandler, normalizer=Normalizer.MAX_NORM, val_size=.1),
@@ -116,7 +116,7 @@ ModelMGR(
 
 ### Plot train and validation loss to TensorBoard
 
-Just pass to `ModelMGR` the keywrod argument `tensorboard=True` and execute:
+Just pass to `BasicModelMGR` the keywrod argument `tensorboard=True` and execute:
 
 ```bash
 ./run_tensorboard.sh

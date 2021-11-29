@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/models/perceptrons """
+""" gtorch_utils/nns/models/classification/perceptrons """
 
 import torch.nn as nn
 
-from gtorch_utils.layers.regularizers import GaussianNoise
+from gtorch_utils.nns.layers.regularizers import GaussianNoise
 
 
 class Perceptron(nn.Module):

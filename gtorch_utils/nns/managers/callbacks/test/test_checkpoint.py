@@ -3,7 +3,7 @@
 
 import unittest
 
-from gtorch_utils.models.managers.callbacks.checkpoint import Checkpoint
+from gtorch_utils.nns.managers.callbacks.checkpoint import Checkpoint
 
 
 class Test_Checkpoint(unittest.TestCase):

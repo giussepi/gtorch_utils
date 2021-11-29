@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/layers/regularizers """
+""" gtorch_utils/nns/layers/regularizers """
 
 import torch
 import torch.nn as nn
