@@ -65,17 +65,25 @@ Some useful pytorch snippets
 - ConfusionMatrixMGR
 
 ### gtorch_utils/segmentation/loss_functions
+- bce_dice_loss_, bce_dice_loss (fastest)
+- dice_coef_loss
 - FocalLoss
 - FPPV_Loss
 - FPR_Loss
+- IOU_Loss<torch.nn.Module>, IOU_loss<callable>
+- lovasz_hinge, lovasz_softmax
 - MCC_Loss, MCCLoss
+- MSSSIM_Loss
 - NPV_Loss
 - Recall_Loss
 - TverskyLoss
 
 ### gtorch_utils/segmentation/metrics
+- DiceCoeff (individual samples), dice_coeff (batches), dice_coef_metric (batches, fastest implementation)
 - fppv
 - fpr
+- IOU
+- MSSSIM
 - npv
 - recall
 - RNPV
