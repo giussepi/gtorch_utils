@@ -54,6 +54,9 @@ Some useful pytorch snippets
 ### gtorch_utils/models/managers/classification
 - BasicModelMGR
 
+### gtorch_utils/models/exceptions/managers
+- ModelMGRImageChannelsError
+
 ### gtorch_utils/models/perceptrons
 - Perceptron
 - MLP
