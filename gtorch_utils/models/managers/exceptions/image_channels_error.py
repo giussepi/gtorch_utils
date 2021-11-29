@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/models/exceptions/managers/image_channels_error """
+""" gtorch_utils/models/managers/exceptions/image_channels_error """
 
 
 class ModelMGRImageChannelsError(RuntimeError):
