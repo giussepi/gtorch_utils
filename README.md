@@ -61,6 +61,9 @@ Some useful pytorch snippets
 - Perceptron
 - MLP
 
+### gtorch_utils/nns/models/segmentation
+- UNet
+
 ### gtorch_utils/segmentation/confusion_matrix
 - ConfusionMatrixMGR
 
@@ -87,6 +90,9 @@ Some useful pytorch snippets
 - npv
 - recall
 - RNPV
+
+### gtorch_utils/utils/images
+- apply_padding
 
 ## Usage
 
