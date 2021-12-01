@@ -91,6 +91,9 @@ Some useful pytorch snippets
 - recall
 - RNPV
 
+### gtorch_utils/segmentation/visualisation
+- plot_img_and_mask
+
 ### gtorch_utils/utils/images
 - apply_padding
 
