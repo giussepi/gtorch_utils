@@ -32,16 +32,14 @@ Some useful pytorch snippets
 ### gtorch_utils/datasets/generic
 - BaseDataset
 
-### gtorch_utils/datasets/segmentation/base
-- DatasetTemplate
+### gtorch_utils/datasets/segmentation/
 - BasicDataset
+- DatasetTemplate
+- HDF5Dataset
 
 ### gtorch_utils/datasets/segmentation/datasets/
 - CarvanaDataset
 - BrainTumorDataset
-
-### gtorch_utils/datasets/segmentation
-- HDF5Dataset
 
 ### gtorch_utils/nns/layers/regularizers
 - GaussianNoise
