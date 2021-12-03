@@ -53,7 +53,7 @@ def dice_coeff(inputs, targets):
     return s / (i + 1)
 
 
-def dice_coef_metric(inputs, target):
+def dice_coeff_metric(inputs, target):
     """
     Calculates the dice coefficient. This implementation is faster than the previous one.
 
@@ -61,6 +61,7 @@ def dice_coef_metric(inputs, target):
     """
     intersection = 2.0 * (target * inputs).sum()
     union = target.sum() + inputs.sum()
+
     if target.sum() == 0 and inputs.sum() == 0:
         return 1.0
 

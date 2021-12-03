@@ -80,7 +80,7 @@ Some useful pytorch snippets
 - TverskyLoss
 
 ### gtorch_utils/segmentation/metrics
-- DiceCoeff (individual samples), dice_coeff (batches), dice_coef_metric (batches, fastest implementation)
+- DiceCoeff (individual samples), dice_coeff (batches), dice_coeff_metric (batches, fastest implementation)
 - fppv
 - fpr
 - IOU
