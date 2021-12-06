@@ -61,6 +61,9 @@ Some useful pytorch snippets
 
 ### gtorch_utils/nns/models/segmentation
 - UNet
+- UNet_3Plus
+- UNet_3Plus_DeepSup
+- UNet_3Plus_DeepSup_CGM
 
 ### gtorch_utils/segmentation/confusion_matrix
 - ConfusionMatrixMGR
