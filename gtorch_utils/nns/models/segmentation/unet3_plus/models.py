@@ -5,6 +5,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
+from gtorch_utils.nns.models.segmentation.unet3_plus.constants import UNet3InitMethod
 from gtorch_utils.nns.models.segmentation.unet3_plus.layers import unetConv2
 from gtorch_utils.nns.models.segmentation.unet3_plus.init_weights import init_weights
 from gtorch_utils.utils.images import apply_padding
@@ -15,7 +16,7 @@ class UNet_3Plus(nn.Module):
     Source: https://github.com/ZJUGiveLab/UNet-Version/blob/master/models/UNet_3Plus.py
     """
 
-    def __init__(self, n_channels=3, n_classes=1, feature_scale=4, is_deconv=True, is_batchnorm=True):
+    def __init__(self, n_channels=3, n_classes=1, feature_scale=4, is_deconv=True, is_batchnorm=True, init_type=UNet3InitMethod.KAIMING):
         super().__init__()
         self.is_deconv = is_deconv
         self.n_channels = n_channels
@@ -23,23 +24,24 @@ class UNet_3Plus(nn.Module):
         self.is_batchnorm = is_batchnorm
         self.feature_scale = feature_scale
         self.bilinear = not is_deconv
+        self.init_type = init_type
 
         filters = [64, 128, 256, 512, 1024]
 
         # -------------Encoder--------------
-        self.conv1 = unetConv2(self.n_channels, filters[0], self.is_batchnorm)
+        self.conv1 = unetConv2(self.n_channels, filters[0], self.is_batchnorm, init_type=self.init_type)
         self.maxpool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv2 = unetConv2(filters[0], filters[1], self.is_batchnorm)
+        self.conv2 = unetConv2(filters[0], filters[1], self.is_batchnorm, init_type=self.init_type)
         self.maxpool2 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv3 = unetConv2(filters[1], filters[2], self.is_batchnorm)
+        self.conv3 = unetConv2(filters[1], filters[2], self.is_batchnorm, init_type=self.init_type)
         self.maxpool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv4 = unetConv2(filters[2], filters[3], self.is_batchnorm)
+        self.conv4 = unetConv2(filters[2], filters[3], self.is_batchnorm, init_type=self.init_type)
         self.maxpool4 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv5 = unetConv2(filters[3], filters[4], self.is_batchnorm)
+        self.conv5 = unetConv2(filters[3], filters[4], self.is_batchnorm, init_type=self.init_type)
 
         # -------------Decoder--------------
         self.CatChannels = filters[0]
@@ -212,9 +214,9 @@ class UNet_3Plus(nn.Module):
         # initialise weights
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                init_weights(m, init_type='kaiming')
+                init_weights(m, init_type=self.init_type)
             elif isinstance(m, nn.BatchNorm2d):
-                init_weights(m, init_type='kaiming')
+                init_weights(m, init_type=self.init_type)
 
     def forward(self, inputs):
         # -------------Encoder-------------
@@ -303,7 +305,7 @@ class UNet_3Plus_DeepSup(nn.Module):
     Source: https://github.com/ZJUGiveLab/UNet-Version/blob/master/models/UNet_3Plus.py
     """
 
-    def __init__(self, n_channels=3, n_classes=1, feature_scale=4, is_deconv=True, is_batchnorm=True):
+    def __init__(self, n_channels=3, n_classes=1, feature_scale=4, is_deconv=True, is_batchnorm=True, init_type=UNet3InitMethod.KAIMING):
         super().__init__()
         self.is_deconv = is_deconv
         self.n_channels = n_channels
@@ -311,23 +313,24 @@ class UNet_3Plus_DeepSup(nn.Module):
         self.is_batchnorm = is_batchnorm
         self.feature_scale = feature_scale
         self.bilinear = not is_deconv
+        self.init_type = init_type
 
         filters = [64, 128, 256, 512, 1024]
 
         # -------------Encoder--------------
-        self.conv1 = unetConv2(self.n_channels, filters[0], self.is_batchnorm)
+        self.conv1 = unetConv2(self.n_channels, filters[0], self.is_batchnorm, init_type=self.init_type)
         self.maxpool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv2 = unetConv2(filters[0], filters[1], self.is_batchnorm)
+        self.conv2 = unetConv2(filters[0], filters[1], self.is_batchnorm, init_type=self.init_type)
         self.maxpool2 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv3 = unetConv2(filters[1], filters[2], self.is_batchnorm)
+        self.conv3 = unetConv2(filters[1], filters[2], self.is_batchnorm, init_type=self.init_type)
         self.maxpool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv4 = unetConv2(filters[2], filters[3], self.is_batchnorm)
+        self.conv4 = unetConv2(filters[2], filters[3], self.is_batchnorm, init_type=self.init_type)
         self.maxpool4 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv5 = unetConv2(filters[3], filters[4], self.is_batchnorm)
+        self.conv5 = unetConv2(filters[3], filters[4], self.is_batchnorm, init_type=self.init_type)
 
         # -------------Decoder--------------
         self.CatChannels = filters[0]
@@ -491,9 +494,9 @@ class UNet_3Plus_DeepSup(nn.Module):
         # initialise weights
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                init_weights(m, init_type='kaiming')
+                init_weights(m, init_type=self.init_type)
             elif isinstance(m, nn.BatchNorm2d):
-                init_weights(m, init_type='kaiming')
+                init_weights(m, init_type=self.init_type)
 
     def forward(self, inputs):
         # -------------Encoder-------------
@@ -568,31 +571,32 @@ class UNet_3Plus_DeepSup_CGM(nn.Module):
     Source: https://github.com/ZJUGiveLab/UNet-Version/blob/master/models/UNet_3Plus.py
     """
 
-    def __init__(self, n_channels=3, n_classes=1, feature_scale=4, is_deconv=True, is_batchnorm=True):
-        super(UNet_3Plus_DeepSup_CGM, self).__init__()
+    def __init__(self, n_channels=3, n_classes=1, feature_scale=4, is_deconv=True, is_batchnorm=True, init_type=UNet3InitMethod.KAIMING):
+        super().__init__()
         self.is_deconv = is_deconv
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.is_batchnorm = is_batchnorm
         self.feature_scale = feature_scale
         self.bilinear = not is_deconv
+        self.init_type = init_type
 
         filters = [64, 128, 256, 512, 1024]
 
         # -------------Encoder--------------
-        self.conv1 = unetConv2(self.n_channels, filters[0], self.is_batchnorm)
+        self.conv1 = unetConv2(self.n_channels, filters[0], self.is_batchnorm, init_type=self.init_type)
         self.maxpool1 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv2 = unetConv2(filters[0], filters[1], self.is_batchnorm)
+        self.conv2 = unetConv2(filters[0], filters[1], self.is_batchnorm, init_type=self.init_type)
         self.maxpool2 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv3 = unetConv2(filters[1], filters[2], self.is_batchnorm)
+        self.conv3 = unetConv2(filters[1], filters[2], self.is_batchnorm, init_type=self.init_type)
         self.maxpool3 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv4 = unetConv2(filters[2], filters[3], self.is_batchnorm)
+        self.conv4 = unetConv2(filters[2], filters[3], self.is_batchnorm, init_type=self.init_type)
         self.maxpool4 = nn.MaxPool2d(kernel_size=2)
 
-        self.conv5 = unetConv2(filters[3], filters[4], self.is_batchnorm)
+        self.conv5 = unetConv2(filters[3], filters[4], self.is_batchnorm, init_type=self.init_type)
 
         # -------------Decoder--------------
         self.CatChannels = filters[0]
@@ -762,9 +766,9 @@ class UNet_3Plus_DeepSup_CGM(nn.Module):
         # initialise weights
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
-                init_weights(m, init_type='kaiming')
+                init_weights(m, init_type=self.init_type)
             elif isinstance(m, nn.BatchNorm2d):
-                init_weights(m, init_type='kaiming')
+                init_weights(m, init_type=self.init_type)
 
     def dotProduct(self, seg, cls):
         B, N, H, W = seg.size()

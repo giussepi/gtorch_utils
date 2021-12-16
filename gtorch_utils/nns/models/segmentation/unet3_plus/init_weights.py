@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """ gtorch_utils/nns/models/segmentation/unet3_plus/init_weights """
 
+from gtorch_utils.nns.models.segmentation.unet3_plus.constants import UNet3InitMethod
 from torch.nn import init
 
 
@@ -64,18 +65,19 @@ def weights_init_orthogonal(m):
         init.constant_(m.bias.data, 0.0)
 
 
-def init_weights(net, init_type='normal'):
+def init_weights(net, init_type=UNet3InitMethod.NORMAL):
     """
     Source: https://github.com/ZJUGiveLab/UNet-Version/blob/master/models/init_weights.py
     """
+    UNet3InitMethod.validate(init_type)
     #print('initialization method [%s]' % init_type)
-    if init_type == 'normal':
+    if init_type == UNet3InitMethod.NORMAL:
         net.apply(weights_init_normal)
-    elif init_type == 'xavier':
+    elif init_type == UNet3InitMethod.XAVIER:
         net.apply(weights_init_xavier)
-    elif init_type == 'kaiming':
+    elif init_type == UNet3InitMethod.KAIMING:
         net.apply(weights_init_kaiming)
-    elif init_type == 'orthogonal':
+    elif init_type == UNet3InitMethod.ORTHOGONAL:
         net.apply(weights_init_orthogonal)
     else:
         raise NotImplementedError('initialization method [%s] is not implemented' % init_type)

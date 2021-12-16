@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 # import torch.nn.functional as F
 
+from gtorch_utils.nns.models.segmentation.unet3_plus.constants import UNet3InitMethod
 from gtorch_utils.nns.models.segmentation.unet3_plus.init_weights import init_weights
 from gtorch_utils.utils.images import apply_padding
 
@@ -14,12 +15,13 @@ class unetConv2(nn.Module):
     Source: https://github.com/ZJUGiveLab/UNet-Version/blob/master/models/layers.py
     """
 
-    def __init__(self, in_size, out_size, is_batchnorm, n=2, ks=3, stride=1, padding=1):
+    def __init__(self, in_size, out_size, is_batchnorm, n=2, ks=3, stride=1, padding=1, init_type=UNet3InitMethod.KAIMING):
         super().__init__()
         self.n = n
         self.ks = ks
         self.stride = stride
         self.padding = padding
+        self.init_type = init_type
         s = stride
         p = padding
 
@@ -40,7 +42,7 @@ class unetConv2(nn.Module):
 
         # initialise the blocks
         for m in self.children():
-            init_weights(m, init_type='kaiming')
+            init_weights(m, init_type=self.init_type)
 
     def forward(self, inputs):
         x = inputs
@@ -57,11 +59,12 @@ class unetUp(nn.Module):
     Source: https://github.com/ZJUGiveLab/UNet-Version/blob/master/models/layers.py
     """
 
-    def __init__(self, in_size, out_size, is_deconv, n_concat=2):
+    def __init__(self, in_size, out_size, is_deconv, n_concat=2, init_type=UNet3InitMethod.KAIMING):
         super().__init__()
         # TODO: the issue is here, the channels must be reduced by half to perform the
         # the concatenation properly
         # self.conv = unetConv2(in_size + (n_concat - 2) * out_size, out_size, False)
+        self.init_type = init_type
         self.doubleconv3x3 = unetConv2(out_size*2, out_size, False)
         self.conv2x2 = nn.Conv2d(in_size, in_size // 2, kernel_size=2, stride=1, padding=1)
 
@@ -74,7 +77,7 @@ class unetUp(nn.Module):
         for m in self.children():
             if m.__class__.__name__.find('unetConv2') != -1:
                 continue
-            init_weights(m, init_type='kaiming')
+            init_weights(m, init_type=self.init_type)
 
     def forward(self, inputs0, inputs1):
         inputs0 = self.up(inputs0)
@@ -101,8 +104,9 @@ class unetUp_origin(nn.Module):
     Source: https://github.com/ZJUGiveLab/UNet-Version/blob/master/models/layers.py
     """
 
-    def __init__(self, in_size, out_size, is_deconv, n_concat=2):
+    def __init__(self, in_size, out_size, is_deconv, n_concat=2, init_type=UNet3InitMethod.KAIMING):
         super().__init__()
+        self.init_type = init_type
         # self.conv = unetConv2(out_size*2, out_size, False)
         if is_deconv:
             self.conv = unetConv2(in_size + (n_concat - 2) * out_size, out_size, False)
@@ -115,7 +119,7 @@ class unetUp_origin(nn.Module):
         for m in self.children():
             if m.__class__.__name__.find('unetConv2') != -1:
                 continue
-            init_weights(m, init_type='kaiming')
+            init_weights(m, init_type=self.init_type)
 
     def forward(self, inputs0, *input):
         # print(self.n_concat)
