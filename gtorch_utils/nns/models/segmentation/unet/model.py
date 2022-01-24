@@ -16,13 +16,19 @@ class UNet(torch.nn.Module):
     Source: https://github.com/milesial/Pytorch-UNet/blob/master/unet/unet_model.py
     """
 
-    def __init__(self, n_channels, n_classes, bilinear=True):
+    def __init__(self, n_channels, n_classes, bilinear=True, batchnorm_cls=torch.nn.BatchNorm2d):
         super().__init__()
         self.n_channels = n_channels
         self.n_classes = n_classes
         self.bilinear = bilinear
+        self.batchnorm_cls = batchnorm_cls
 
-        self.inc = DoubleConv(n_channels, 64)
+        assert isinstance(self.n_channels, int), type(self.n_channels)
+        assert isinstance(self.n_classes, int), type(self.n_classes)
+        assert isinstance(self.bilinear, bool), type(self.bilinear)
+        assert issubclass(self.batchnorm_cls, torch.nn.modules.batchnorm._BatchNorm), type(self.batchnom_cls)
+
+        self.inc = DoubleConv(n_channels, 64, batchnorm_cls=self.batchnorm_cls)
         self.down1 = Down(64, 128)
         self.down2 = Down(128, 256)
         self.down3 = Down(256, 512)

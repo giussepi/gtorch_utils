@@ -13,16 +13,27 @@ class DoubleConv(torch.nn.Module):
     Source: https://github.com/milesial/Pytorch-UNet/blob/master/unet/unet_parts.py
     """
 
-    def __init__(self, in_channels, out_channels, mid_channels=None):
+    def __init__(self, in_channels, out_channels, mid_channels=None, batchnorm_cls=torch.nn.BatchNorm2d):
         super().__init__()
-        if not mid_channels:
-            mid_channels = out_channels
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.mid_channels = mid_channels
+        self.batchnorm_cls = batchnorm_cls
+
+        assert isinstance(self.in_channels, int), type(self.in_channels)
+        assert isinstance(self.out_channels, int), type(self.out_channels)
+        if self.mid_channels is not None:
+            assert isinstance(self.mid_channels, int), type(self.mid_channels)
+        assert issubclass(self.batchnorm_cls, torch.nn.modules.batchnorm._BatchNorm), type(self.batchnom_cls)
+
+        if not self.mid_channels:
+            self.mid_channels = self.out_channels
         self.double_conv = torch.nn.Sequential(
-            torch.nn.Conv2d(in_channels, mid_channels, kernel_size=3, padding=1),
-            torch.nn.BatchNorm2d(mid_channels),
+            torch.nn.Conv2d(self.in_channels, self.mid_channels, kernel_size=3, padding=1),
+            batchnorm_cls(self.mid_channels),
             torch.nn.ReLU(inplace=True),
-            torch.nn.Conv2d(mid_channels, out_channels, kernel_size=3, padding=1),
-            torch.nn.BatchNorm2d(out_channels),
+            torch.nn.Conv2d(self.mid_channels, self.out_channels, kernel_size=3, padding=1),
+            batchnorm_cls(self.out_channels),
             torch.nn.ReLU(inplace=True)
         )
 
