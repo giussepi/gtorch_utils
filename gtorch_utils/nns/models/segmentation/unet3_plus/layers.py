@@ -2,7 +2,7 @@
 """ gtorch_utils/nns/models/segmentation/unet3_plus/layers """
 
 import torch
-import torch.nn as nn
+from torch import nn
 # import torch.nn.functional as F
 
 from gtorch_utils.nns.models.segmentation.unet3_plus.constants import UNet3InitMethod
@@ -10,25 +10,32 @@ from gtorch_utils.nns.models.segmentation.unet3_plus.init_weights import init_we
 from gtorch_utils.utils.images import apply_padding
 
 
+__all__ = ['unetConv2', 'unetUp', 'unetUp_origin', 'FinalConv']
+
+
 class unetConv2(nn.Module):
     """
     Source: https://github.com/ZJUGiveLab/UNet-Version/blob/master/models/layers.py
     """
 
-    def __init__(self, in_size, out_size, is_batchnorm, n=2, ks=3, stride=1, padding=1, init_type=UNet3InitMethod.KAIMING):
+    def __init__(self, in_size, out_size, is_batchnorm, batchnorm_cls=nn.BatchNorm2d, n=2, ks=3, stride=1, padding=1, init_type=UNet3InitMethod.KAIMING):
         super().__init__()
         self.n = n
         self.ks = ks
         self.stride = stride
         self.padding = padding
         self.init_type = init_type
+        self.batchnorm_cls = batchnorm_cls
+
+        assert issubclass(self.batchnorm_cls, nn.modules.batchnorm._BatchNorm), type(self.batchnom_cls)
+
         s = stride
         p = padding
 
         if is_batchnorm:
             for i in range(1, n + 1):
                 conv = nn.Sequential(nn.Conv2d(in_size, out_size, ks, s, p),
-                                     nn.BatchNorm2d(out_size),
+                                     self.batchnorm_cls(out_size),
                                      nn.ReLU(inplace=True), )
                 setattr(self, 'conv%d' % i, conv)
                 in_size = out_size
