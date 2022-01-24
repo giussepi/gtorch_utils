@@ -48,11 +48,15 @@ class Down(torch.nn.Module):
     Source: https://github.com/milesial/Pytorch-UNet/blob/master/unet/unet_parts.py
     """
 
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels, out_channels, batchnorm_cls=torch.nn.BatchNorm2d):
         super().__init__()
+        self.batchnorm_cls = batchnorm_cls
+
+        assert issubclass(self.batchnorm_cls, torch.nn.modules.batchnorm._BatchNorm), type(self.batchnom_cls)
+
         self.maxpool_conv = torch.nn.Sequential(
             torch.nn.MaxPool2d(2),
-            DoubleConv(in_channels, out_channels)
+            DoubleConv(in_channels, out_channels, batchnorm_cls=self.batchnorm_cls)
         )
 
     def forward(self, x):
@@ -66,15 +70,20 @@ class Up(torch.nn.Module):
     Source: https://github.com/milesial/Pytorch-UNet/blob/master/unet/unet_parts.py
     """
 
-    def __init__(self, in_channels, out_channels, bilinear=True):
+    def __init__(self, in_channels, out_channels, bilinear=True, batchnorm_cls=torch.nn.BatchNorm2d):
         super().__init__()
+
+        self.batchnorm_cls = batchnorm_cls
+
+        assert issubclass(self.batchnorm_cls, torch.nn.modules.batchnorm._BatchNorm), type(self.batchnom_cls)
+
         # if bilinear, use the normal convolutions to reduce the number of channels
         if bilinear:
             self.up = torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
-            self.conv = DoubleConv(in_channels, out_channels, in_channels // 2)
+            self.conv = DoubleConv(in_channels, out_channels, in_channels // 2, batchnorm_cls=self.batchnorm_cls)
         else:
             self.up = torch.nn.ConvTranspose2d(in_channels, in_channels // 2, kernel_size=2, stride=2)
-            self.conv = DoubleConv(in_channels, out_channels)
+            self.conv = DoubleConv(in_channels, out_channels, batchnorm_cls=self.batchnorm_cls)
 
     def forward(self, x1, x2):
         x1 = self.up(x1)
