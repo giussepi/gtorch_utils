@@ -17,9 +17,11 @@ class ConfusionMatrixMGR:
         Initializes the object instance
 
         Args:
-            predictions <torch.Tenssor>: Predicted masks with shape [batch_size, channels, ...].
+            predictions <torch.Tenssor>: Predicted masks with shape [batch_size, channels, ...]. It will be
+                                         reshaped to [batch_size, channels, -1]
                                          Its values must be in the range [0, 1].
-            targets     <torch.Tenssor>: Target masks with shape [batch_size, channels, ...].
+            targets     <torch.Tenssor>: Target masks with shape [batch_size, channels, ...]. It will be
+                                         reshaped to [batch_size, channels, -1]
                                          Its values must be 0 or 1.
         """
         assert isinstance(predictions, torch.Tensor), type(predictions)
