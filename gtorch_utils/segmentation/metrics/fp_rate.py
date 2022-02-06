@@ -15,8 +15,10 @@ def fpr(input_, targets, per_channel=False):
     FPR = \frac{FP}{TN+FP}
 
     Args:
-        input_  <torch.Tensor>: predicted masks [batch_size, channels, ...]
-        target  <torch.Tensor>: ground truth masks [batch_size, channels, ...]
+        input_  <torch.Tensor>: predicted masks [batch_size, channels, ...]. It will be
+                                reshaped to [batch_size, channels, -1]
+        target  <torch.Tensor>: ground truth masks [batch_size, channels, ...]. It will be
+                                reshaped to [batch_size, channels, -1]
         per_channel     <bool>: Whether or not return recall values per channel
 
     Returns:
