@@ -69,7 +69,7 @@ Some useful pytorch snippets
 - ConfusionMatrixMGR
 
 ### gtorch_utils/segmentation/loss_functions
-- bce_dice_loss_, bce_dice_loss (fastest)
+- bce_dice_loss_, bce_dice_loss (fastest), BceDiceLoss (support for logits)
 - dice_coef_loss
 - FocalLoss
 - FPPV_Loss
@@ -80,6 +80,7 @@ Some useful pytorch snippets
 - MSSSIM_Loss
 - NPV_Loss
 - Recall_Loss
+- SpecificityLoss
 - TverskyLoss
 
 ### gtorch_utils/segmentation/metrics
@@ -91,6 +92,7 @@ Some useful pytorch snippets
 - npv
 - recall
 - RNPV
+- Specificity
 
 ### gtorch_utils/segmentation/visualisation
 - plot_img_and_mask

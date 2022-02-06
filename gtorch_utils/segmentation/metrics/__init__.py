@@ -9,3 +9,4 @@ from gtorch_utils.segmentation.metrics.msssim import MSSSIM
 from gtorch_utils.segmentation.metrics.neg_pred_val import npv
 from gtorch_utils.segmentation.metrics.recall import recall
 from gtorch_utils.segmentation.metrics.rnpv import RNPV
+from gtorch_utils.segmentation.metrics.specificity import Specificity
