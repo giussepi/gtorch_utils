@@ -21,7 +21,7 @@ class Specificity(torch.nn.Module):
     """
 
     def __init__(
-            self, *, with_logits=False, per_class=False,
+            self, *, with_logits: bool = False, per_class: bool = False,
             logits_transform: Callable[[torch.Tensor], torch.Tensor] = torch.sigmoid
     ):
         """
@@ -57,7 +57,7 @@ class Specificity(torch.nn.Module):
 
         return tn / (tn + fp + EPSILON)
 
-    def forward(self, preds, targets):
+    def forward(self, preds: torch.Tensor, targets: torch.Tensor):
         """
         Calculates and returns the average specificity (true negative rate) of the
         provided masks
