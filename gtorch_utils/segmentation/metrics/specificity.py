@@ -18,19 +18,36 @@ class Specificity(torch.nn.Module):
         Specificity()(predictions, ground_truth)
     """
 
-    def __init__(self, *, with_logits=False, per_channel=False):
+    def __init__(self, *, with_logits=False, per_class=False):
         """
         Initializes the object instance
 
         with_logits <bool>: Set to True when working with logits to apply sigmoid
-        per_channel <bool>: Set it to True to calculate specificity values per channel
+        per_class <bool>: Set it to True to calculate specificity values per class
         """
         super().__init__()
         assert isinstance(with_logits, bool), type(with_logits)
-        assert isinstance(per_channel, bool), type(per_channel)
+        assert isinstance(per_class, bool), type(per_class)
 
         self.with_logits = with_logits
-        self.per_channel = per_channel
+        self.per_class = per_class
+
+    @staticmethod
+    def _calculate_specificity(tn: torch.Tensor, fp: torch.Tensor):
+        """
+        Calculates and returns the specificity
+
+        Kwargs:
+            tn <torch.Tensor>: tensor with true negative values
+            fp <torch.Tensor>: tensor with false positive values
+
+        returns:
+            recall <torch.Tensor>
+        """
+        assert isinstance(tn, torch.Tensor), type(tn)
+        assert isinstance(fp, torch.Tensor), type(fp)
+
+        return tn / (tn + fp + EPSILON)
 
     def forward(self, preds, targets):
         """
@@ -40,10 +57,10 @@ class Specificity(torch.nn.Module):
         specificity = \frac{TN}{TN + FP}
 
         kwargs:
-            preds   <torch.Tensor>: predicted masks [batch_size, channels, ...]. It will be
-                                    reshaped to [batch_size, channels, -1]
-            targets <torch.Tensor>: ground truth masks [batch_size, channels, ...]. It will be
-                                    reshaped to [batch_size, channels, -1]
+            preds   <torch.Tensor>: predicted masks [batch_size, classes, ...]. It will be
+                                    reshaped to [batch_size, classes, -1]
+            targets <torch.Tensor>: ground truth masks [batch_size, classes, ...]. It will be
+                                    reshaped to [batch_size, classes, -1]
 
         Returns:
             specificity <torch.Tensor>
@@ -57,12 +74,9 @@ class Specificity(torch.nn.Module):
         mgr = ConfusionMatrixMGR(preds, targets)
         tn = mgr.true_negatives
 
-        if self.per_channel:
-            result = tn / (tn + mgr.false_positives + EPSILON)
+        if self.per_class:
+            return self._calculate_specificity(tn.sum(0), mgr.false_positives.sum(0))
 
-            return result.sum(0) / preds.size(0)
-
-        tn = tn.sum(1)
-        result = tn / (tn + mgr.false_positives.sum(1) + EPSILON)
+        result = self._calculate_specificity(tn.sum(1), mgr.false_positives.sum(1))
 
         return result.sum() / preds.size(0)

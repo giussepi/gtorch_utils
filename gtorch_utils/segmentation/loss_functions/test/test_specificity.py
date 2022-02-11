@@ -21,16 +21,16 @@ class Test_SpecificityLoss(unittest.TestCase):
             [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]]
         ])
 
-    def test_per_channel_False(self):
+    def test_per_class_False(self):
         self.assertTrue(torch.equal(
             1-Specificity()(self.pred, self.gt),
             SpecificityLoss()(self.pred, self.gt)
         ))
 
-    def test_per_channel_True(self):
+    def test_per_class_True(self):
         self.assertTrue(torch.equal(
-            1-Specificity(per_channel=True)(self.pred, self.gt),
-            SpecificityLoss(per_channel=True)(self.pred, self.gt)
+            1-Specificity(per_class=True)(self.pred, self.gt),
+            SpecificityLoss(per_class=True)(self.pred, self.gt)
         ))
 
     def test_with_logits_True(self):

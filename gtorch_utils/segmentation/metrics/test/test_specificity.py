@@ -23,15 +23,15 @@ class Test_Specificity(unittest.TestCase):
         self.tn = torch.Tensor([[2, 0], [1, 1]])
         self.fp = torch.Tensor([[1, 3], [2, 2]])
 
-    def test_per_channel_False(self):
+    def test_per_class_False(self):
         self.assertTrue(torch.equal(
             Specificity()(self.pred, self.gt),
             (self.tn.sum(1) / (self.tn.sum(1) + self.fp.sum(1) + EPSILON)).sum() / self.pred.size(0)
         ))
 
-    def test_per_channel_True(self):
+    def test_per_class_True(self):
         self.assertTrue(torch.equal(
-            Specificity(per_channel=True)(self.pred, self.gt),
+            Specificity(per_class=True)(self.pred, self.gt),
             (self.tn / (self.tn + self.fp + EPSILON)).sum(0) / self.pred.size(0)
         ))
 
