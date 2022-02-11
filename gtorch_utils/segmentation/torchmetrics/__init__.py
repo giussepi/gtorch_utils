@@ -3,3 +3,4 @@
 
 from gtorch_utils.segmentation.torchmetrics.recall import Recall
 from gtorch_utils.segmentation.torchmetrics.specificity import Specificity
+from gtorch_utils.segmentation.torchmetrics.dice import DiceCoefficient, DiceCoefficientPerImage

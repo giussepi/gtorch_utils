@@ -97,6 +97,7 @@ Some useful pytorch snippets
 ### gtorch_utils/segmentation/torchmetrics
 - Recall
 - Specificity
+- DiceCoefficient, DiceCoefficientPerImage
 
 ### gtorch_utils/segmentation/visualisation
 - plot_img_and_mask
