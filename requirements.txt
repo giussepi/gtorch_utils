@@ -1,6 +1,7 @@
 gutils @ https://github.com/giussepi/gutils/tarball/master
 tensorboardX>=2.1
 tensorboard>=2.4.0
+torchmetrics>=0.7.2
 logzero>=1.6.3
 
 # emacs as python editor

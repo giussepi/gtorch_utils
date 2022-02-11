@@ -94,6 +94,10 @@ Some useful pytorch snippets
 - RNPV
 - Specificity
 
+### gtorch_utils/segmentation/torchmetrics
+- Recall
+- Specificity
+
 ### gtorch_utils/segmentation/visualisation
 - plot_img_and_mask
 
