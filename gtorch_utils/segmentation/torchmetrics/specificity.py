@@ -49,9 +49,6 @@ class Specificity(Metric):
         self.add_state('tn', default=torch.tensor(0), dist_reduce_fx="sum")
         self.add_state('fp', default=torch.tensor(0), dist_reduce_fx="sum")
 
-        if not self.per_class:
-            self.add_state('batch_size', default=torch.tensor(0), dist_reduce_fx="sum")
-
     def update(self, preds: torch.Tensor, target: torch.Tensor):
         """
         Updates the state given the inputs
@@ -79,9 +76,6 @@ class Specificity(Metric):
 
         self.tn += tn
         self.fp += fp
-
-        if not self.per_class:
-            self.batch_size += torch.tensor(preds.size(0))
 
     @staticmethod
     def _calculate_specificity(tn: torch.Tensor, fp: torch.Tensor):
