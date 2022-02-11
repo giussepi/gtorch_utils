@@ -27,7 +27,7 @@ class Specificity(torch.nn.Module):
         """
         Initializes the object instance
 
-        with_logits          <bool>: Set to True when working with logits to apply sigmoid
+        with_logits          <bool>: Set to True when working with logits to apply logits_transform
         per_class            <bool>: Set it to True to calculate specificity values per class
         logits_transform <callable>: Function to be applied to the logits in preds. Default torch.sigmoid
         """

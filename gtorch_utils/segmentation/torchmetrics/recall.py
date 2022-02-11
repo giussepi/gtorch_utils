@@ -14,7 +14,7 @@ __all__ = ['Recall']
 
 
 class Recall(Metric):
-    """
+    r"""
     TorchMetric based recall with logits support
 
     Calculates and returns the average recall of the provided masks or the recall per class
@@ -35,7 +35,7 @@ class Recall(Metric):
 
         Kwargs:
             per_class            <bool>: Whether or not return recall values per class. Default False
-            with_logits          <bool>: Set to True when working with logits to apply sigmoid
+            with_logits          <bool>: Set to True when working with logits to apply logits_transform
             logits_transform <callable>: function to be applied to the logits in preds. Default torch.sigmoid
         """
         super().__init__(**kwargs)
@@ -57,7 +57,7 @@ class Recall(Metric):
         Updates the state given the inputs
 
         Kwargs:
-            preds <torch.Tensor>: predicted masks [batch_size, classes, ...]
+            preds  <torch.Tensor>: predicted masks [batch_size, classes, ...]
             target <torch.Tensor>: ground truth masks [batch_size, classes, ...]
         """
         assert preds.shape == target.shape

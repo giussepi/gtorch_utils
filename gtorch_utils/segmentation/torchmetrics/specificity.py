@@ -14,7 +14,7 @@ __all__ = ['Specificity']
 
 
 class Specificity(Metric):
-    """
+    r"""
     TorchMetric based specificity with logits support
 
     Calculates and returns the average specificity of the provided masks or the specificity per class
@@ -33,8 +33,8 @@ class Specificity(Metric):
         """
         Initializes the object instance
 
-        with_logits <bool>: Set to True when working with logits to apply sigmoid
-        per_channel <bool>: Set it to True to calculate specificity values per channel
+        per_class   <bool>: Set it to True to calculate specificity values per class
+        with_logits <bool>: Set to True when working with logits to apply logits_transform
         logits_transform <callable>: function to be applied to the logits in preds. Default torch.sigmoid
         """
         super().__init__(**kwargs)
@@ -57,7 +57,7 @@ class Specificity(Metric):
         Updates the state given the inputs
 
         Kwargs:
-            preds <torch.Tensor>: predicted masks [batch_size, classes, ...]
+            preds  <torch.Tensor>: predicted masks [batch_size, classes, ...]
             target <torch.Tensor>: ground truth masks [batch_size, classes, ...]
         """
         assert preds.shape == target.shape
