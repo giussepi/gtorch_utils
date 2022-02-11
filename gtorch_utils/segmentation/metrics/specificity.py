@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """ gtorch_utils/segmentation/metrics/specificity """
 
+from typing import Callable
+
 import torch
 
 from gtorch_utils.constants import EPSILON
@@ -18,19 +20,25 @@ class Specificity(torch.nn.Module):
         Specificity()(predictions, ground_truth)
     """
 
-    def __init__(self, *, with_logits=False, per_class=False):
+    def __init__(
+            self, *, with_logits=False, per_class=False,
+            logits_transform: Callable[[torch.Tensor], torch.Tensor] = torch.sigmoid
+    ):
         """
         Initializes the object instance
 
-        with_logits <bool>: Set to True when working with logits to apply sigmoid
-        per_class <bool>: Set it to True to calculate specificity values per class
+        with_logits          <bool>: Set to True when working with logits to apply sigmoid
+        per_class            <bool>: Set it to True to calculate specificity values per class
+        logits_transform <callable>: Function to be applied to the logits in preds. Default torch.sigmoid
         """
         super().__init__()
         assert isinstance(with_logits, bool), type(with_logits)
         assert isinstance(per_class, bool), type(per_class)
+        assert callable(logits_transform), f'{logits_transform} must be a callable'
 
         self.with_logits = with_logits
         self.per_class = per_class
+        self.logits_transform = logits_transform
 
     @staticmethod
     def _calculate_specificity(tn: torch.Tensor, fp: torch.Tensor):
@@ -69,7 +77,7 @@ class Specificity(torch.nn.Module):
         assert isinstance(targets, torch.Tensor), type(targets)
 
         if self.with_logits:
-            preds = torch.sigmoid(preds)
+            preds = self.logits_transform(preds)
 
         mgr = ConfusionMatrixMGR(preds, targets)
         tn = mgr.true_negatives
