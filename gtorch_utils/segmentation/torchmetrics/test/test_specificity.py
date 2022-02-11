@@ -26,7 +26,7 @@ class Test_Specificity(unittest.TestCase):
     def test_per_class_False(self):
         self.assertTrue(torch.equal(
             Specificity()(self.pred, self.gt),
-            (self.tn.sum(1) / (self.tn.sum(1) + self.fp.sum(1) + EPSILON)).sum() / self.pred.size(0)
+            (self.tn.sum(1) / (self.tn.sum(1) + self.fp.sum(1) + EPSILON)).sum()
         ))
 
     def test_per_class_True(self):

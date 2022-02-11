@@ -110,6 +110,4 @@ class Specificity(Metric):
         if self.per_class:
             return self._calculate_specificity(self.tn.sum(0), self.fp.sum(0))
 
-        result = self._calculate_specificity(self.tn.sum(1), self.fp.sum(1))
-
-        return result.sum() / self.batch_size
+        return self._calculate_specificity(self.tn.sum(1), self.fp.sum(1)).sum()
