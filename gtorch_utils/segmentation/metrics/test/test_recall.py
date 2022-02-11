@@ -11,7 +11,7 @@ from gtorch_utils.segmentation.metrics.recall import recall
 
 class Test_recall(unittest.TestCase):
 
-    def test_per_channel_False(self):
+    def test_per_class_False(self):
         pred = torch.Tensor([[[1., 0., 0., 1., 0., 0., 0.]]])
         gt = torch.Tensor([[[1., 1., 1., 0., 0., 0., 1.]]])
         tp = 1
@@ -22,7 +22,7 @@ class Test_recall(unittest.TestCase):
             round(tp/(tp+fn+EPSILON), 2)
         )
 
-    def test_per_channel_True(self):
+    def test_per_class_True(self):
         pred = torch.Tensor([
             [[1., 0., 0., 1., 0., 0., 0.], [1., 0., 0., 1., 1., 1., 0.]],
             [[0., 1., 1., 1., 0., 1., 0.], [0., 0., 0., 0., 1., 1., 0.]]
@@ -34,7 +34,14 @@ class Test_recall(unittest.TestCase):
         tp = torch.Tensor([[1, 1], [2, 0]])
         fn = torch.Tensor([[3, 3], [2, 4]])
 
-        self.assertTrue(torch.equal(recall(pred, gt, True), (tp/(tp+fn+EPSILON)).sum(0)/2))
+        self.assertFalse(torch.equal(
+            recall(pred, gt, True),
+            tp/(tp+fn+EPSILON)
+        ))
+        self.assertTrue(torch.equal(
+            recall(pred, gt, True),
+            tp.sum(0)/(tp.sum(0)+fn.sum(0)+EPSILON)
+        ))
 
 
 if __name__ == '__main__':

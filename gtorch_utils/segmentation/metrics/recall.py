@@ -7,7 +7,7 @@ from gtorch_utils.constants import EPSILON
 from gtorch_utils.segmentation.confusion_matrix import ConfusionMatrixMGR
 
 
-def recall(input_, target, per_channel=False):
+def recall(input_: torch.Tensor, target: torch.Tensor, per_class: bool = False):
     """
     Calculates and returns the average recall of the provided masks
 
@@ -16,22 +16,22 @@ def recall(input_, target, per_channel=False):
     Args:
         input_ <torch.Tensor>: predicted masks [batch_size, channels, ...]
         target <torch.Tensor>: ground truth masks [batch_size, channels, ...]
-        per_channel    <bool>: Whether or not return recall values per channel
+        per_class    <bool>: Whether or not return recall values per class
 
     Returns:
-        avg_recall <torch.Tensor>
+        recall <torch.Tensor>
     """
     assert isinstance(input_, torch.Tensor), type(input_)
     assert isinstance(target, torch.Tensor), type(target)
-    assert isinstance(per_channel, bool), type(per_channel)
+    assert isinstance(per_class, bool), type(per_class)
 
     mgr = ConfusionMatrixMGR(input_, target)
     tp = mgr.true_positives
 
-    if per_channel:
-        result = tp / (tp + mgr.false_negatives + EPSILON)
+    if per_class:
+        tp = tp.sum(0)
 
-        return result.sum(0) / input_.size(0)
+        return tp / (tp + mgr.false_negatives.sum(0) + EPSILON)
 
     tp = tp.sum(1)
     result = tp / (tp + mgr.false_negatives.sum(1) + EPSILON)
