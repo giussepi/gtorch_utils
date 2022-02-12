@@ -94,7 +94,7 @@ class Specificity(Metric):
 
         return tn / (tn + fp + EPSILON)
 
-    def compute(self) -> Torch.Tensor:
+    def compute(self) -> torch.Tensor:
         """
         Computes and returns recall
 
