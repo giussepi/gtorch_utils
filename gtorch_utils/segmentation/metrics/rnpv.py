@@ -6,6 +6,9 @@ import torch
 from gtorch_utils.segmentation.metrics import recall, npv
 
 
+__all__ = ['RNPV']
+
+
 class RNPV(torch.nn.Module):
     """
     Calculates and returns the Recall Negative Predictive Value (RNPV) score
@@ -16,13 +19,13 @@ class RNPV(torch.nn.Module):
         score = RNPV()(predicted_masks, ground_truth_masks)
     """
 
-    def __init__(self, xi=1, tau=1):
+    def __init__(self, xi: float = 1., tau: float = 1.):
         """
         Initializes the object instance.
 
         Args:
-            xi           <int, float>: recall weight. Default 1
-            tau          <int, float>: npv multiplier. Default 1
+            xi  <int, float>: recall weight. Default 1
+            tau <int, float>: npv multiplier. Default 1
         """
         super().__init__()
         assert isinstance(xi, (int, float)), type(xi)
@@ -33,7 +36,7 @@ class RNPV(torch.nn.Module):
         self.xi = xi
         self.tau = tau
 
-    def forward(self, preds, targets):
+    def forward(self, preds: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
         """
         Calculates and returns the RNPV score
 
