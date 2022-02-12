@@ -5,6 +5,9 @@ import torch
 from torch.autograd import Function
 
 
+__all__ = ['DiceCoeff', 'dice_coeff', 'dice_coeff_metric']
+
+
 class DiceCoeff(Function):
     """
     Dice coeff for individual examples
@@ -12,7 +15,7 @@ class DiceCoeff(Function):
     Source: https://github.com/giussepi/Pytorch-UNet/blob/master/dice_loss.py
     """
 
-    def forward(self, input_, target):
+    def forward(self, input_: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         self.save_for_backward(input_, target)
         eps = 0.0001
         self.inter = torch.dot(input_.view(-1), target.view(-1))
@@ -22,7 +25,7 @@ class DiceCoeff(Function):
         return t
 
     # This function has only a single output, so it gets only one gradient
-    def backward(self, grad_output):
+    def backward(self, grad_output: torch.Tensor) -> tuple:
 
         input_, target = self.saved_variables
         grad_input = grad_target = None
@@ -36,11 +39,11 @@ class DiceCoeff(Function):
         return grad_input, grad_target
 
 
-def dice_coeff(inputs, targets):
+def dice_coeff(inputs: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
     """
     Dice coeff for batches
 
-    Soruce: https://github.com/giussepi/Pytorch-UNet/blob/master/dice_loss.py
+    Source: https://github.com/giussepi/Pytorch-UNet/blob/master/dice_loss.py
     """
     if inputs.is_cuda:
         s = torch.FloatTensor(1).cuda().zero_()
@@ -53,7 +56,7 @@ def dice_coeff(inputs, targets):
     return s / (i + 1)
 
 
-def dice_coeff_metric(inputs, target):
+def dice_coeff_metric(inputs: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
     """
     Calculates the dice coefficient. This implementation is faster than the previous one.
 
@@ -63,6 +66,6 @@ def dice_coeff_metric(inputs, target):
     union = target.sum() + inputs.sum()
 
     if target.sum() == 0 and inputs.sum() == 0:
-        return 1.0
+        return torch.tensor(1.)
 
     return intersection / union
