@@ -78,7 +78,7 @@ class Specificity(Metric):
         self.fp += fp
 
     @staticmethod
-    def _calculate_specificity(tn: torch.Tensor, fp: torch.Tensor):
+    def _calculate_specificity(tn: torch.Tensor, fp: torch.Tensor) -> torch.Tensor:
         """
         Calculates and returns the specificity
 
@@ -94,7 +94,7 @@ class Specificity(Metric):
 
         return tn / (tn + fp + EPSILON)
 
-    def compute(self):
+    def compute(self) -> Torch.Tensor:
         """
         Computes and returns recall
 
