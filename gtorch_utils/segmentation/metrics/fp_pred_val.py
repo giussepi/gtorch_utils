@@ -7,7 +7,7 @@ from gtorch_utils.constants import EPSILON
 from gtorch_utils.segmentation.confusion_matrix import ConfusionMatrixMGR
 
 
-def fppv(input_, targets, per_channel=False):
+def fppv(input_: torch.Tensor, targets: torch.Tensor, per_channel: bool = False) -> torch.Tensor:
     """
     Calculates and returns the average False Positive Predictive Value (FPPV) of the
     provided masks
