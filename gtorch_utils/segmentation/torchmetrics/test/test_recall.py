@@ -15,30 +15,29 @@ class Test_Recall(unittest.TestCase):
     def setUp(self):
         self.pred = torch.Tensor([
             [[1., 0., 0., 1., 0., 0., 0.], [1., 0., 0., 1., 1., 1., 0.]],
+            [[1., 0., 0., 1., 0., 0., 0.], [1., 0., 0., 1., 1., 1., 0.]],
+            [[1., 0., 0., 1., 0., 0., 0.], [1., 0., 0., 1., 1., 1., 0.]],
             [[0., 1., 1., 1., 0., 1., 0.], [0., 0., 0., 0., 1., 1., 0.]]
         ])
         self.gt = torch.Tensor([
             [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]],
+            [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]],
+            [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]],
             [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]]
         ])
-        self.tp = torch.Tensor([[1, 1], [2, 0]])
-        self.fn = torch.Tensor([[3, 3], [2, 4]])
+        self.tp = torch.Tensor([[1, 1], [1, 1], [1, 1], [2, 0]])
+        self.fn = torch.Tensor([[3, 3], [3, 3], [3, 3], [2, 4]])
 
     def test_per_class_False(self):
-        pred = torch.Tensor([[[1., 0., 0., 1., 0., 0., 0.]]])
-        gt = torch.Tensor([[[1., 1., 1., 0., 0., 0., 1.]]])
-        tp = 1
-        fn = 3
-
-        self.assertEqual(
-            round(Recall()(pred, gt).item(), 2),
-            round(tp/(tp+fn+EPSILON), 2)
-        )
+        self.assertTrue(torch.equal(
+            Recall()(self.pred, self.gt),
+            (self.tp.sum()/(self.tp.sum()+self.fn.sum()+EPSILON))
+        ))
 
     def test_per_class_True(self):
         self.assertFalse(torch.equal(
             Recall(per_class=True)(self.pred, self.gt),
-            (self.tp/(self.tp+self.fn+EPSILON)).sum(0)
+            (self.tp.sum()/(self.tp.sum()+self.fn.sum()+EPSILON))
         ))
         self.assertTrue(torch.equal(
             Recall(per_class=True)(self.pred, self.gt),

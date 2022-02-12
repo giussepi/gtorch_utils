@@ -49,9 +49,6 @@ class Recall(Metric):
         self.add_state("tp", default=torch.tensor(0), dist_reduce_fx="sum")
         self.add_state("fn", default=torch.tensor(0), dist_reduce_fx="sum")
 
-        if not self.per_class:
-            self.add_state('batch_size', default=torch.tensor(0), dist_reduce_fx="sum")
-
     def update(self, preds: torch.Tensor, target: torch.Tensor):
         """
         Updates the state given the inputs
@@ -80,11 +77,8 @@ class Recall(Metric):
         self.tp += tp
         self.fn += fn
 
-        if not self.per_class:
-            self.batch_size += torch.tensor(preds.size(0))
-
     @staticmethod
-    def _calculate_recall(tp: torch.Tensor, fn: torch.Tensor):
+    def _calculate_recall(tp: torch.Tensor, fn: torch.Tensor) -> torch.Tensor:
         """
         Calculates and returns the recall
 
@@ -100,7 +94,7 @@ class Recall(Metric):
 
         return tp / (tp + fn + EPSILON)
 
-    def compute(self):
+    def compute(self) -> torch.Tensor:
         """
         Computes and returns recall
 
@@ -110,6 +104,4 @@ class Recall(Metric):
         if self.per_class:
             return self._calculate_recall(self.tp.sum(0), self.fn.sum(0))
 
-        result = self._calculate_recall(self.tp.sum(1), self.fn.sum(1))
-
-        return result.sum() / self.batch_size
+        return self._calculate_recall(self.tp.sum(), self.fn.sum())
