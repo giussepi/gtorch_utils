@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 """ gtorch_utils/segmentation/metrics/iou """
 
-
 import torch
 
 
-def iou(pred, target):
+__all__ = ['IOU']
+
+
+def iou(pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
     """ Source: https://github.com/giussepi/UNet-Version/blob/master/loss/iouLoss.py """
     b = pred.shape[0]
     iou = 0.0
@@ -26,5 +28,5 @@ def iou(pred, target):
 class IOU(torch.nn.Module):
     """ Source: https://github.com/giussepi/UNet-Version/blob/master/loss/iouLoss.py """
 
-    def forward(self, pred, target):
+    def forward(self, pred: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
         return iou(pred, target)
