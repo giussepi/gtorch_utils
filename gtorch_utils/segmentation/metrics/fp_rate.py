@@ -7,7 +7,7 @@ from gtorch_utils.constants import EPSILON
 from gtorch_utils.segmentation.confusion_matrix import ConfusionMatrixMGR
 
 
-def fpr(input_, targets, per_channel=False):
+def fpr(input_: torch.Tensor, targets: torch.Tensor, per_channel: bool = False) -> torch.Tensor:
     """
     Calculates and returns the average False Positive Rate (FPR) score of the
     provided masks
