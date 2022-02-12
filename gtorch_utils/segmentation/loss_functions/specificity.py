@@ -41,7 +41,7 @@ class SpecificityLoss(torch.nn.Module):
         self.specificity = Specificity(
             per_class=self.per_class, with_logits=self.with_logits, logits_transform=self.logits_transform)
 
-    def forward(self, preds: torch.Tensor, targets: torch.Tensor):
+    def forward(self, preds: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
         """
         Calculates and returns the specificity loss (true negative rate)
 
