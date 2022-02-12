@@ -14,19 +14,23 @@ class Test_Specificity(unittest.TestCase):
     def setUp(self):
         self.pred = torch.Tensor([
             [[1., 0., 0., 1., 0., 0., 0.], [1., 0., 0., 1., 1., 1., 0.]],
+            [[1., 0., 0., 1., 0., 0., 0.], [1., 0., 0., 1., 1., 1., 0.]],
+            [[1., 0., 0., 1., 0., 0., 0.], [1., 0., 0., 1., 1., 1., 0.]],
             [[0., 1., 1., 1., 0., 1., 0.], [0., 0., 0., 0., 1., 1., 0.]]
         ])
         self.gt = torch.Tensor([
             [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]],
+            [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]],
+            [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]],
             [[1., 1., 1., 0., 0., 0., 1.], [1., 1., 1., 0., 0., 0., 1.]]
         ])
-        self.tn = torch.Tensor([[2, 0], [1, 1]])
-        self.fp = torch.Tensor([[1, 3], [2, 2]])
+        self.tn = torch.Tensor([[2, 0], [2, 0], [2, 0], [1, 1]])
+        self.fp = torch.Tensor([[1, 3], [1, 3], [1, 3], [2, 2]])
 
     def test_per_class_False(self):
         self.assertTrue(torch.equal(
             Specificity()(self.pred, self.gt),
-            (self.tn.sum(1) / (self.tn.sum(1) + self.fp.sum(1) + EPSILON)).sum()
+            (self.tn.sum() / (self.tn.sum() + self.fp.sum() + EPSILON))
         ))
 
     def test_per_class_True(self):

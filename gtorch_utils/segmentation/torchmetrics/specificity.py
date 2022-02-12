@@ -104,4 +104,4 @@ class Specificity(Metric):
         if self.per_class:
             return self._calculate_specificity(self.tn.sum(0), self.fp.sum(0))
 
-        return self._calculate_specificity(self.tn.sum(1), self.fp.sum(1)).sum()
+        return self._calculate_specificity(self.tn.sum(), self.fp.sum())
