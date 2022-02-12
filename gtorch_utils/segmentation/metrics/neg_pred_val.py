@@ -7,7 +7,10 @@ from gtorch_utils.constants import EPSILON
 from gtorch_utils.segmentation.confusion_matrix import ConfusionMatrixMGR
 
 
-def npv(input_, target, per_channel=False):
+__all__ = ['npv']
+
+
+def npv(input_: torch.Tensor, target: torch.Tensor, per_channel: bool = False):
     """
     Calculates and returns the average negative predictive value of the provided masks
 
