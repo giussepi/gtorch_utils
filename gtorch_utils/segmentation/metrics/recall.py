@@ -7,7 +7,10 @@ from gtorch_utils.constants import EPSILON
 from gtorch_utils.segmentation.confusion_matrix import ConfusionMatrixMGR
 
 
-def recall(input_: torch.Tensor, target: torch.Tensor, per_class: bool = False):
+__all__ = ['recall']
+
+
+def recall(input_: torch.Tensor, target: torch.Tensor, per_class: bool = False) -> torch.Tensor:
     """
     Calculates and returns the average recall of the provided masks
 
