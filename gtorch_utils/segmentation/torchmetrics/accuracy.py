@@ -106,10 +106,10 @@ class Accuracy(Metric):
 
     def compute(self) -> torch.Tensor:
         """
-        Computes and returns recall
+        Computes and returns the accuracy
 
         Returns:
-            recall <torch.Tensor>
+            accuracy <torch.Tensor>
         """
         if self.per_class:
             return self._calculate_accuracy(self.tp.sum(0), self.fp.sum(0), self.tn.sum(0), self.fn.sum(0))
