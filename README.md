@@ -95,6 +95,7 @@ Some useful pytorch snippets
 - Specificity
 
 ### gtorch_utils/segmentation/torchmetrics
+- Accuracy
 - Recall
 - Specificity
 - DiceCoefficient, DiceCoefficientPerImage
