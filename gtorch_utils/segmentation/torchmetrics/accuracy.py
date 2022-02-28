@@ -95,7 +95,7 @@ class Accuracy(Metric):
             fn <torch.Tensor>: tensor with false negative values
 
         returns:
-            pixel_accruacy <torch.Tensor>
+            pixel_accuracy <torch.Tensor>
         """
         assert isinstance(tp, torch.Tensor), type(tp)
         assert isinstance(fp, torch.Tensor), type(fp)
