@@ -35,7 +35,7 @@ class UNet_3Plus(nn.Module):
         assert isinstance(self.feature_scale, int), type(self.feature_scale)
         assert isinstance(self.is_deconv, bool), type(self.is_deconv)
         assert isinstance(self.is_batchnorm, bool), type(self.is_batchnorm)
-        assert issubclass(self.batchnorm_cls, nn.modules.batchnorm._BatchNorm), type(self.batchnom_cls)
+        assert issubclass(self.batchnorm_cls, nn.modules.batchnorm._BatchNorm), type(self.batchnorm_cls)
         UNet3InitMethod.validate(self.init_type)
 
         filters = [64, 128, 256, 512, 1024]
@@ -338,7 +338,7 @@ class UNet_3Plus_DeepSup(nn.Module):
         assert isinstance(self.feature_scale, int), type(self.feature_scale)
         assert isinstance(self.is_deconv, bool), type(self.is_deconv)
         assert isinstance(self.is_batchnorm, bool), type(self.is_batchnorm)
-        assert issubclass(self.batchnorm_cls, nn.modules.batchnorm._BatchNorm), type(self.batchnom_cls)
+        assert issubclass(self.batchnorm_cls, nn.modules.batchnorm._BatchNorm), type(self.batchnorm_cls)
         UNet3InitMethod.validate(self.init_type)
 
         filters = [64, 128, 256, 512, 1024]
@@ -618,7 +618,7 @@ class UNet_3Plus_DeepSup_CGM(nn.Module):
         assert isinstance(self.feature_scale, int), type(self.feature_scale)
         assert isinstance(self.is_deconv, bool), type(self.is_deconv)
         assert isinstance(self.is_batchnorm, bool), type(self.is_batchnorm)
-        assert issubclass(self.batchnorm_cls, nn.modules.batchnorm._BatchNorm), type(self.batchnom_cls)
+        assert issubclass(self.batchnorm_cls, nn.modules.batchnorm._BatchNorm), type(self.batchnorm_cls)
         UNet3InitMethod.validate(self.init_type)
 
         filters = [64, 128, 256, 512, 1024]
