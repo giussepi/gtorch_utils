@@ -2,8 +2,12 @@
 """ gtorch_utils/nns/models/segmentation/unet/unet_parts """
 
 import torch
+from torch.nn.modules.batchnorm import _BatchNorm
 
 from gtorch_utils.utils.images import apply_padding
+
+
+__all__ = ['DoubleConv', 'Down', 'Up', 'OutConv', 'UpConcat', 'UnetDsv']
 
 
 class DoubleConv(torch.nn.Module):
@@ -82,6 +86,9 @@ class Up(torch.nn.Module):
             self.up = torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
             self.conv = DoubleConv(in_channels, out_channels, in_channels // 2, batchnorm_cls=self.batchnorm_cls)
         else:
+            # FIXME: These lines will not work. It must be fixed for the non-bilinear case.
+            # A very similar case is fixed at
+            # nns/models/layers/disagreement_attention/layers.py -> UnetDAUp
             self.up = torch.nn.ConvTranspose2d(in_channels, in_channels // 2, kernel_size=2, stride=2)
             self.conv = DoubleConv(in_channels, out_channels, batchnorm_cls=self.batchnorm_cls)
 
@@ -104,3 +111,69 @@ class OutConv(torch.nn.Module):
 
     def forward(self, x):
         return self.conv(x)
+
+
+class UpConcat(torch.nn.Module):
+
+    def __init__(self, in_channels: int, out_channels: int, bilinear: bool = True,
+                 batchnorm_cls: _BatchNorm = torch.nn.BatchNorm2d):
+        super().__init__()
+
+        assert isinstance(in_channels, int), type(in_channels)
+        assert isinstance(out_channels, int), type(out_channels)
+        assert isinstance(bilinear, bool), type(bilinear)
+        assert issubclass(batchnorm_cls, _BatchNorm), type(batchnorm_cls)
+
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.bilinear = bilinear
+        self.batchnorm_cls = batchnorm_cls
+
+        up_out_channels = self.in_channels if self.bilinear else self.in_channels // 2
+
+        if self.bilinear:
+            self.up = torch.nn.Sequential(
+                torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True),
+                torch.nn.Conv2d(self.in_channels, up_out_channels, kernel_size=3, padding=1),
+                batchnorm_cls(up_out_channels),
+                torch.nn.LeakyReLU(inplace=True),
+            )
+        else:
+            self.up = torch.nn.Sequential(
+                torch.nn.ConvTranspose2d(self.in_channels, up_out_channels, kernel_size=2, stride=2),
+                batchnorm_cls(up_out_channels),
+                torch.nn.LeakyReLU(inplace=True),
+            )
+
+        self.conv_block = DoubleConv(2*up_out_channels, out_channels, batchnorm_cls=self.batchnorm_cls)
+
+    def forward(self, x: torch.Tensor, skip_connection: torch.Tensor, /):
+        """
+        Kwargs:
+            x               <torch.Tensor>: activation/feature maps
+            skip_connection <torch.Tensor>: skip connection containing activation/feature maps
+        Returns:
+            Union[torch.Tensor, None]
+        """
+        assert isinstance(x, torch.Tensor), type(x)
+        assert isinstance(skip_connection, torch.Tensor), type(skip_connection)
+
+        decoder_x = self.up(x)
+        decoder_x = torch.cat((skip_connection, decoder_x), dim=1)
+        x = self.conv_block(decoder_x)
+
+        return x
+
+
+class UnetDsv(torch.nn.Module):
+    """
+    Deep supervision layer for UNet
+    """
+
+    def __init__(self, in_size: int, out_size: int, scale_factor: int):
+        super().__init__()
+        self.dsv = torch.nn.Sequential(torch.nn.Conv2d(in_size, out_size, kernel_size=1, stride=1, padding=0),
+                                       torch.nn.Upsample(scale_factor=scale_factor, mode='bilinear', align_corners=True), )
+
+    def forward(self, x):
+        return self.dsv(x)
