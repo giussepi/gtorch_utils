@@ -116,6 +116,9 @@ class OutConv(torch.nn.Module):
 
 
 class UpConcat(torch.nn.Module):
+    """
+    Upsampling and concatenation layer for XAttentionUNet
+    """
 
     def __init__(self, in_channels: int, out_channels: int, bilinear: bool = True,
                  batchnorm_cls: _BatchNorm = torch.nn.BatchNorm2d):
@@ -131,23 +134,25 @@ class UpConcat(torch.nn.Module):
         self.bilinear = bilinear
         self.batchnorm_cls = batchnorm_cls
 
-        up_out_channels = self.in_channels if self.bilinear else self.in_channels // 2
+        # always using upsample (following original Attention Unet implementation)
+        self.up = torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False)
+        self.conv_block = DoubleConv(in_channels+out_channels, out_channels, batchnorm_cls=self.batchnorm_cls)
 
-        if self.bilinear:
-            self.up = torch.nn.Sequential(
-                torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
-                torch.nn.Conv2d(self.in_channels, up_out_channels, kernel_size=3, padding=1),
-                batchnorm_cls(up_out_channels),
-                torch.nn.LeakyReLU(inplace=True),
-            )
-        else:
-            self.up = torch.nn.Sequential(
-                torch.nn.ConvTranspose2d(self.in_channels, up_out_channels, kernel_size=2, stride=2),
-                batchnorm_cls(up_out_channels),
-                torch.nn.LeakyReLU(inplace=True),
-            )
-
-        self.conv_block = DoubleConv(2*up_out_channels, out_channels, batchnorm_cls=self.batchnorm_cls)
+        # up_out_channels = self.in_channels if self.bilinear else self.in_channels // 2
+        # if self.bilinear:
+        #     self.up = torch.nn.Sequential(
+        #         torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
+        #         # torch.nn.Conv2d(self.in_channels, up_out_channels, kernel_size=3, padding=1),
+        #         # batchnorm_cls(up_out_channels),
+        #         # torch.nn.LeakyReLU(inplace=True),
+        #     )
+        # else:
+        #     self.up = torch.nn.Sequential(
+        #         torch.nn.ConvTranspose2d(self.in_channels, up_out_channels, kernel_size=2, stride=2),
+        #         # batchnorm_cls(up_out_channels),
+        #         # torch.nn.LeakyReLU(inplace=True),
+        #     )
+        # self.conv_block = DoubleConv(2*up_out_channels, out_channels, batchnorm_cls=self.batchnorm_cls)
 
     def forward(self, x: torch.Tensor, skip_connection: torch.Tensor, /):
         """
