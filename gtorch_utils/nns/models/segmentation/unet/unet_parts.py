@@ -85,7 +85,7 @@ class Up(torch.nn.Module):
 
         # if bilinear, use the normal convolutions to reduce the number of channels
         if bilinear:
-            self.up = torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True)
+            self.up = torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False)
             self.conv = DoubleConv(in_channels, out_channels, in_channels // 2, batchnorm_cls=self.batchnorm_cls)
         else:
             # FIXME: These lines will not work. It must be fixed for the non-bilinear case.
@@ -135,7 +135,7 @@ class UpConcat(torch.nn.Module):
 
         if self.bilinear:
             self.up = torch.nn.Sequential(
-                torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=True),
+                torch.nn.Upsample(scale_factor=2, mode='bilinear', align_corners=False),
                 torch.nn.Conv2d(self.in_channels, up_out_channels, kernel_size=3, padding=1),
                 batchnorm_cls(up_out_channels),
                 torch.nn.LeakyReLU(inplace=True),
@@ -176,7 +176,7 @@ class UnetDsv(torch.nn.Module):
         super().__init__()
         self.dsv = torch.nn.Sequential(
             torch.nn.Conv2d(in_size, out_size, kernel_size=1, stride=1, padding=0),
-            torch.nn.Upsample(scale_factor=scale_factor, mode='bilinear', align_corners=True),
+            torch.nn.Upsample(scale_factor=scale_factor, mode='bilinear', align_corners=False),
         )
 
     def forward(self, x):
