@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 """ gtorch_utils/nns/models/segmentation/unet/unet_parts """
 
+from typing import Union
+
 import torch
 from torch.nn.modules.batchnorm import _BatchNorm
 
@@ -172,8 +174,37 @@ class UnetDsv(torch.nn.Module):
 
     def __init__(self, in_size: int, out_size: int, scale_factor: int):
         super().__init__()
-        self.dsv = torch.nn.Sequential(torch.nn.Conv2d(in_size, out_size, kernel_size=1, stride=1, padding=0),
-                                       torch.nn.Upsample(scale_factor=scale_factor, mode='bilinear', align_corners=True), )
+        self.dsv = torch.nn.Sequential(
+            torch.nn.Conv2d(in_size, out_size, kernel_size=1, stride=1, padding=0),
+            torch.nn.Upsample(scale_factor=scale_factor, mode='bilinear', align_corners=True),
+        )
 
     def forward(self, x):
         return self.dsv(x)
+
+
+class UnetGridGatingSignal(torch.nn.Module):
+    def __init__(self, in_size: int, out_size: int, kernel_size: Union[int, tuple] = 1,
+                 batchnorm_cls: _BatchNorm = torch.nn.BatchNorm2d):
+        super().__init__()
+
+        assert isinstance(in_size, int), type(in_size)
+        assert isinstance(out_size, int), type(out_size)
+        assert isinstance(kernel_size, (int, tuple)), type(kernel_size)
+        assert issubclass(batchnorm_cls, _BatchNorm), type(batchnorm_cls)
+
+        self.in_size = in_size
+        self.out_size = out_size
+        self.kernel_size = kernel_size
+        self.batchnorm_cls = batchnorm_cls
+
+        self.conv1 = torch.nn.Sequential(
+            torch.nn.Conv2d(self.in_size, self.out_size, self.kernel_size, stride=1, padding=0),
+            self.batchnorm_cls(self.out_size),
+            torch.nn.ReLU(inplace=True),
+        )
+
+    def forward(self, x):
+        outputs = self.conv1(x)
+
+        return outputs
