@@ -32,6 +32,10 @@ Some useful pytorch snippets
 ### gtorch_utils/datasets/generic
 - BaseDataset
 
+### gtorch_utils/datasets/labels
+- DatasetLabelsMixin
+- Detail
+
 ### gtorch_utils/datasets/segmentation/
 - BasicDataset
 - DatasetTemplate
