@@ -37,9 +37,9 @@ class ConfusionMatrixMGR:
 
         assert 0 <= preds_min <= 1, preds_min
         assert 0 <= preds_max <= 1, preds_max
-        assert len(targets_unique_values) <= 2
+        assert len(targets_unique_values) == 2
         assert targets_unique_values.min() == 0, targets_unique_values.min()
-        assert targets_unique_values.max() in (0, 1), targets_unique_values.max()
+        assert targets_unique_values.max() == 1, targets_unique_values.max()
 
         self.predictions = predictions
         self.targets = targets
