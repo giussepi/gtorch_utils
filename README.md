@@ -69,6 +69,15 @@ Some useful pytorch snippets
 - UNet_3Plus_DeepSup
 - UNet_3Plus_DeepSup_CGM
 
+### gtorch_utils/nns/models/segmentation/unet/unet_parts.py
+- DoubleConv
+- XConv
+- Down
+- Up
+- OutConv
+- UpConcat
+- UnetDsv
+
 ### gtorch_utils/segmentation/confusion_matrix
 - ConfusionMatrixMGR
 

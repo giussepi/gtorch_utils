@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """ gtorch_utils/nns/models/segmentation/unet/unet_parts """
 
+from collections import OrderedDict
 from typing import Union, Optional
 
 import torch
@@ -9,7 +10,7 @@ from torch.nn.modules.batchnorm import _BatchNorm
 from gtorch_utils.utils.images import apply_padding
 
 
-__all__ = ['DoubleConv', 'Down', 'Up', 'OutConv', 'UpConcat', 'UnetDsv']
+__all__ = ['DoubleConv', 'XConv',  'Down', 'Up', 'OutConv', 'UpConcat', 'UnetDsv']
 
 
 class DoubleConv(torch.nn.Module):
@@ -67,6 +68,82 @@ class DoubleConv(torch.nn.Module):
 
     def forward(self, x: torch.Tensor):
         return self.double_conv(x)
+
+
+class XConv(torch.nn.Module):
+    """
+    (convolution => [BN] => ReLU) * X
+    """
+
+    def __init__(
+            self, in_channels: int, out_channels: int, mid_channels: Optional[int] = None,
+            batchnorm_cls: Optional[_BatchNorm] = None, data_dimensions: int = 2,
+            conv_layers: int = 2
+    ):
+        """
+        Kwargs:
+            in_channels      <int>:
+            out_channels     <int>:
+            mid_channels     <int>:
+            batchnom_cls <_BatchNorm>: Batch normalization class. Default torch.nn.BatchNorm2d or
+                                    torch.nn.BatchNorm3d
+            data_dimensions  <int>: Number of dimensions of the data. 2 for 2D [bacth, channel, height, width],
+                                    3 for 3D [batch, channel, depth, height, width]. This argument will
+                                    determine to use conv2d or conv3d.
+                                    Default 2
+            conv_layers      <int>: Number of convolutional layers to stack. Default 2
+        """
+        super().__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.mid_channels = mid_channels
+        self.batchnorm_cls = batchnorm_cls
+        self.data_dimensions = data_dimensions
+        self.conv_layers = conv_layers
+
+        if self.batchnorm_cls is None:
+            self.batchnorm_cls = torch.nn.BatchNorm2d if self.data_dimensions == 2 else torch.nn.BatchNorm3d
+
+        assert isinstance(self.in_channels, int), type(self.in_channels)
+        assert isinstance(self.out_channels, int), type(self.out_channels)
+        if self.mid_channels is not None:
+            assert isinstance(self.mid_channels, int), type(self.mid_channels)
+        assert issubclass(self.batchnorm_cls, _BatchNorm), type(self.batchnom_cls)
+        assert self.data_dimensions in (2, 3), 'only 2d and 3d data is supported'
+        assert isinstance(self.conv_layers, int), type(self.conv_layers)
+        assert self.conv_layers > 0, self.conv_layers
+
+        convxd = torch.nn.Conv2d if self.data_dimensions == 2 else torch.nn.Conv3d
+
+        if not self.mid_channels:
+            self.mid_channels = self.out_channels
+
+        layers = OrderedDict()
+
+        if self.conv_layers == 1:
+            layers['0'] = convxd(self.in_channels, self.out_channels, kernel_size=3, padding=1)
+            layers['1'] = self.batchnorm_cls(self.out_channels)
+            layers['2'] = torch.nn.ReLU(inplace=True)
+
+        else:
+            for i in range(0, self.conv_layers*3, 3):
+                if i == 0:
+                    layers[str(i)] = convxd(self.in_channels, self.mid_channels, kernel_size=3, padding=1)
+                    layers[str(i+1)] = self.batchnorm_cls(self.mid_channels)
+                    layers[str(i+2)] = torch.nn.ReLU(inplace=True)
+                elif i + 3 < self.conv_layers*3:
+                    layers[str(i)] = convxd(self.mid_channels, self.mid_channels, kernel_size=3, padding=1)
+                    layers[str(i+1)] = self.batchnorm_cls(self.mid_channels)
+                    layers[str(i+2)] = torch.nn.ReLU(inplace=True)
+                else:
+                    layers[str(i)] = convxd(self.mid_channels, self.out_channels, kernel_size=3, padding=1)
+                    layers[str(i+1)] = self.batchnorm_cls(self.out_channels)
+                    layers[str(i+2)] = torch.nn.ReLU(inplace=True)
+
+        self.x_conv = torch.nn.Sequential(layers)
+
+    def forward(self, x: torch.Tensor):
+        return self.x_conv(x)
 
 
 class Down(torch.nn.Module):
