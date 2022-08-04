@@ -73,12 +73,15 @@ Some useful pytorch snippets
 - DoubleConv
 - XConv
 - Down
+- MicroAE
+- MicroUpAE
 - AEDown
 - Up
 - OutConv
 - UpConcat
 - AEUpConcat
 - UnetDsv
+- UnetGridGatingSignal
 
 ### gtorch_utils/segmentation/confusion_matrix
 - ConfusionMatrixMGR
