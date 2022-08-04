@@ -73,9 +73,11 @@ Some useful pytorch snippets
 - DoubleConv
 - XConv
 - Down
+- AEDown
 - Up
 - OutConv
 - UpConcat
+- AEUpConcat
 - UnetDsv
 
 ### gtorch_utils/segmentation/confusion_matrix

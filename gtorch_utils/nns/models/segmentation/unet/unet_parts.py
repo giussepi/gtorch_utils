@@ -10,7 +10,7 @@ from torch.nn.modules.batchnorm import _BatchNorm
 from gtorch_utils.utils.images import apply_padding
 
 
-__all__ = ['DoubleConv', 'XConv',  'Down', 'Up', 'OutConv', 'UpConcat', 'UnetDsv']
+__all__ = ['DoubleConv', 'XConv',  'Down', 'AEDown', 'Up', 'OutConv', 'UpConcat', 'AEUpConcat', 'UnetDsv']
 
 
 class DoubleConv(torch.nn.Module):
@@ -196,6 +196,46 @@ class Down(torch.nn.Module):
         return self.maxpool_conv(x)
 
 
+class AEDown(Down):
+    """
+    Downscaling with maxpool then double conv using a micro AE
+
+    Inspired on: https://github.com/milesial/Pytorch-UNet/blob/master/unet/unet_parts.py
+    """
+
+    def __init__(
+            self, in_channels: int, out_channels: int, batchnorm_cls: Optional[_BatchNorm] = None,
+            data_dimensions: int = 2
+    ):
+        """
+        Kwargs:
+            in_channels      <int>:
+            out_channels     <int>:
+            batchnom_cls <_BatchNorm>: Batch normalization class. Default torch.nn.BatchNorm2d or
+                                    torch.nn.BatchNorm3d
+            data_dimensions  <int>: Number of dimensions of the data. 2 for 2D [bacth, channel, height, width],
+                                    3 for 3D [batch, channel, depth, height, width]. This argument will
+                                    determine to use conv2d or conv3d.
+                                    Default 2
+        """
+        super().__init__(in_channels, out_channels, batchnorm_cls, data_dimensions)
+        mode = 'bilinear' if self.data_dimensions == 2 else 'trilinear'
+
+        self.up_conv = torch.nn.Sequential(
+            torch.nn.Upsample(scale_factor=2, mode=mode, align_corners=False),
+            DoubleConv(
+                self.out_channels, self.in_channels, batchnorm_cls=self.batchnorm_cls,
+                data_dimensions=self.data_dimensions
+            )
+        )
+
+    def forward(self, x: torch.Tensor):
+        downsampled = self.maxpool_conv(x)
+        downupsampled = self.up_conv(downsampled)
+
+        return downsampled, downupsampled
+
+
 class Up(torch.nn.Module):
     """
     Upscaling then double conv
@@ -374,6 +414,62 @@ class UpConcat(torch.nn.Module):
         x = self.conv_block(decoder_x)
 
         return x
+
+
+class AEUpConcat(UpConcat):
+    """
+    Upsampling and concatenation layer for XAttentionUNet using a micro autoencoder
+    """
+
+    def __init__(
+            self, in_channels: int, out_channels: int, bilinear: bool = True,
+            batchnorm_cls: Optional[_BatchNorm] = None, data_dimensions: int = 2
+    ):
+        """
+        Kwargs:
+            in_channels      <int>: in channels
+            out_channels     <int>: out channels
+            bilinear        <bool>: [DEPRECATED] If true upsample is used, else convtranspose.
+                                    Currently upsample is always employed.
+                                    Default True
+            batchnom_cls <_BatchNorm>: Batch normalization class. Default torch.nn.BatchNorm2d or
+                                    torch.nn.BatchNorm3d
+            data_dimensions  <int>: Number of dimensions of the data. 2 for 2D [bacth, channel, height, width],
+                                    3 for 3D [batch, channel, depth, height, width]. This argument will
+                                    determine to use conv2d or conv3d.
+                                    Default 2
+        """
+        super().__init__(in_channels, out_channels, bilinear, batchnorm_cls, data_dimensions)
+
+        maxpoolxd = torch.nn.MaxPool2d if self.data_dimensions == 2 else torch.nn.MaxPool3d
+
+        self.down = Down(out_channels, out_channels,
+                         batchnorm_cls=self.batchnorm_cls, data_dimensions=self.data_dimensions)
+        self.up_conv = torch.nn.Sequential(self.up, self.conv_block)
+        self.maxpool_conv = torch.nn.Sequential(
+            maxpoolxd(2),
+            DoubleConv(
+                out_channels, in_channels+out_channels, batchnorm_cls=self.batchnorm_cls,
+                data_dimensions=self.data_dimensions
+            )
+        )
+
+    def forward(self, x: torch.Tensor, skip_connection: torch.Tensor, /):
+        """
+        Kwargs:
+            x               <torch.Tensor>: activation/feature maps
+            skip_connection <torch.Tensor>: skip connection containing activation/feature maps
+        Returns:
+            decoder_x_upsampled <torch.Tensor>, ae_output <torch.Tensor>, ae_input <torch.Tensor>
+        """
+        assert isinstance(x, torch.Tensor), type(x)
+        assert isinstance(skip_connection, torch.Tensor), type(skip_connection)
+
+        decoder_x = torch.cat((self.down(skip_connection), x), dim=1)
+        decoder_x_upsampled = self.up_conv(decoder_x)
+        decoder_x_updownsampled = self.maxpool_conv(decoder_x_upsampled)
+
+        return decoder_x_upsampled, decoder_x_updownsampled, decoder_x
 
 
 class UnetDsv(torch.nn.Module):
