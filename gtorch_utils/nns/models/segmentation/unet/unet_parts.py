@@ -11,8 +11,8 @@ from gtorch_utils.utils.images import apply_padding
 
 
 __all__ = [
-    'DoubleConv', 'XConv',  'Down', 'MicroAE', 'MicroUpAE', 'AEDown', 'Up', 'OutConv', 'UpConcat', 'AEUpConcat', 'UnetDsv',
-    'UnetGridGatingSignal'
+    'DoubleConv', 'XConv',  'Down', 'MicroAE', 'TinyAE', 'TinyUpAE', 'MicroUpAE', 'AEDown', 'AEDown2', 'Up',
+    'OutConv', 'UpConcat', 'AEUpConcat', 'AEUpConcat2', 'UnetDsv', 'UnetGridGatingSignal'
 ]
 
 
@@ -255,6 +255,98 @@ class MicroAE(torch.nn.Module):
         return encoded, decoded
 
 
+class TinyAE(torch.nn.Module):
+    """
+    Tiny Convolutional AutoEncoder
+    """
+
+    def __init__(self, in_channels: int, batchnorm_cls: Optional[_BatchNorm] = None, data_dimensions: int = 2):
+        """
+        Kwargs:
+            in_channels      <int>: encoder's in channels (decoder's out channels)
+            batchnom_cls <_BatchNorm>: Batch normalization class. Default torch.nn.BatchNorm2d or
+                                    torch.nn.BatchNorm3d
+            data_dimensions  <int>: Number of dimensions of the data. 2 for 2D [bacth, channel, height, width],
+                                    3 for 3D [batch, channel, depth, height, width]. This argument will
+                                    determine to use conv2d or conv3d.
+                                    Default 2
+        """
+        super().__init__()
+        self.in_channels = in_channels
+        self.batchnorm_cls = batchnorm_cls
+        self.data_dimensions = data_dimensions
+
+        if self.batchnorm_cls is None:
+            self.batchnorm_cls = torch.nn.BatchNorm2d if self.data_dimensions == 2 else torch.nn.BatchNorm3d
+
+        assert isinstance(self.in_channels, int), type(self.in_channels)
+        assert issubclass(self.batchnorm_cls, _BatchNorm), type(self.batchnom_cls)
+        assert self.data_dimensions in (2, 3), 'only 2d and 3d data is supported'
+
+        convxd = torch.nn.Conv2d if self.data_dimensions == 2 else torch.nn.Conv3d
+        convtranspose = torch.nn.ConvTranspose2d if self.data_dimensions == 2 else torch.nn.ConvTranspose3d
+
+        self.encoder = torch.nn.Sequential(
+            convxd(self.in_channels, 2 * self.in_channels, kernel_size=3, stride=2, padding=1),
+            self.batchnorm_cls(2 * self.in_channels),
+            torch.nn.ReLU(inplace=True),
+        )
+        self.decoder = convtranspose(
+            2 * self.in_channels, self.in_channels, kernel_size=3, stride=2, padding=1, output_padding=1)
+
+    def forward(self, x: torch.Tensor):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+
+        return encoded, decoded
+
+
+class TinyUpAE(torch.nn.Module):
+    """
+    Tiny upsampling Convolutional AutoEncoder
+    """
+
+    def __init__(self, in_channels: int, batchnorm_cls: Optional[_BatchNorm] = None, data_dimensions: int = 2):
+        """
+        Kwargs:
+            in_channels      <int>: encoder's in channels (decoder's out channels)
+            batchnom_cls <_BatchNorm>: Batch normalization class. Default torch.nn.BatchNorm2d or
+                                    torch.nn.BatchNorm3d
+            data_dimensions  <int>: Number of dimensions of the data. 2 for 2D [bacth, channel, height, width],
+                                    3 for 3D [batch, channel, depth, height, width]. This argument will
+                                    determine to use conv2d or conv3d.
+                                    Default 2
+        """
+        super().__init__()
+        self.in_channels = in_channels
+        self.batchnorm_cls = batchnorm_cls
+        self.data_dimensions = data_dimensions
+
+        if self.batchnorm_cls is None:
+            self.batchnorm_cls = torch.nn.BatchNorm2d if self.data_dimensions == 2 else torch.nn.BatchNorm3d
+
+        assert isinstance(self.in_channels, int), type(self.in_channels)
+        assert issubclass(self.batchnorm_cls, _BatchNorm), type(self.batchnom_cls)
+        assert self.data_dimensions in (2, 3), 'only 2d and 3d data is supported'
+
+        convxd = torch.nn.Conv2d if self.data_dimensions == 2 else torch.nn.Conv3d
+        convtranspose = torch.nn.ConvTranspose2d if self.data_dimensions == 2 else torch.nn.ConvTranspose3d
+
+        self.encoder = torch.nn.Sequential(
+            convtranspose(
+                self.in_channels, self.in_channels // 2, kernel_size=3, stride=2, padding=1, output_padding=1),
+            self.batchnorm_cls(self.in_channels // 2),
+            torch.nn.ReLU(inplace=True),
+        )
+        self.decoder = convxd(self.in_channels // 2, self.in_channels, kernel_size=3, stride=2, padding=1)
+
+    def forward(self, x: torch.Tensor):
+        encoded = self.encoder(x)
+        decoded = self.decoder(encoded)
+
+        return encoded, decoded
+
+
 class MicroUpAE(torch.nn.Module):
     """
     Micro Up AE following XAttentionUnet layers
@@ -339,6 +431,55 @@ class AEDown(torch.nn.Module):
         downsampled, downupsampled = self.ae(x)
 
         return downsampled, downupsampled
+
+
+class AEDown2(torch.nn.Module):
+    """
+    Downscaling with maxpool then double conv using an isolated Tiny AE
+    """
+
+    def __init__(
+            self, in_channels: int, out_channels: int, batchnorm_cls: Optional[_BatchNorm] = None,
+            data_dimensions: int = 2
+    ):
+        """
+        Kwargs:
+            in_channels      <int>:
+            out_channels     <int>:
+            batchnom_cls <_BatchNorm>: Batch normalization class. Default torch.nn.BatchNorm2d or
+                                    torch.nn.BatchNorm3d
+            data_dimensions  <int>: Number of dimensions of the data. 2 for 2D [bacth, channel, height, width],
+                                    3 for 3D [batch, channel, depth, height, width]. This argument will
+                                    determine to use conv2d or conv3d.
+                                    Default 2
+        """
+        super().__init__()
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.batchnorm_cls = batchnorm_cls
+        self.data_dimensions = data_dimensions
+
+        if self.batchnorm_cls is None:
+            self.batchnorm_cls = torch.nn.BatchNorm2d if self.data_dimensions == 2 else torch.nn.BatchNorm3d
+
+        assert isinstance(self.in_channels, int), type(self.in_channels)
+        assert isinstance(self.out_channels, int), type(self.out_channels)
+        assert issubclass(self.batchnorm_cls, _BatchNorm), type(self.batchnom_cls)
+        assert self.data_dimensions in (2, 3), 'only 2d and 3d data is supported'
+
+        maxpoolxd = torch.nn.MaxPool2d if self.data_dimensions == 2 else torch.nn.MaxPool3d
+        self.ae = TinyAE(self.in_channels, self.batchnorm_cls, self.data_dimensions)
+        self.down = maxpoolxd(2)
+        self.out = DoubleConv(
+            3 * self.in_channels, self.out_channels, batchnorm_cls=self.batchnorm_cls,
+            data_dimensions=self.data_dimensions
+        )
+
+    def forward(self, x: torch.Tensor):
+        encoded, decoded = self.ae(x.detach())
+        enriched_downsample = self.out(torch.cat([encoded.detach(), self.down(x)], dim=1))
+
+        return enriched_downsample, decoded
 
 
 class Up(torch.nn.Module):
@@ -565,6 +706,72 @@ class AEUpConcat(torch.nn.Module):
         decoder_x_upsampled, decoder_x_updownsampled = self.ae(decoder_x)
 
         return decoder_x_upsampled, decoder_x_updownsampled, decoder_x
+
+
+class AEUpConcat2(torch.nn.Module):
+    """
+    Upsampling and concatenation layer for XAttentionUNet
+    """
+
+    def __init__(
+            self, in_channels: int, out_channels: int, bilinear: bool = True,
+            batchnorm_cls: Optional[_BatchNorm] = None, data_dimensions: int = 2
+    ):
+        """
+        Kwargs:
+            in_channels      <int>: in channels
+            out_channels     <int>: out channels
+            bilinear        <bool>: [DEPRECATED] If true upsample is used, else convtranspose.
+                                    Currently upsample is always employed.
+                                    Default True
+            batchnom_cls <_BatchNorm>: Batch normalization class. Default torch.nn.BatchNorm2d or
+                                    torch.nn.BatchNorm3d
+            data_dimensions  <int>: Number of dimensions of the data. 2 for 2D [bacth, channel, height, width],
+                                    3 for 3D [batch, channel, depth, height, width]. This argument will
+                                    determine to use conv2d or conv3d.
+                                    Default 2
+        """
+        super().__init__()
+
+        self.in_channels = in_channels
+        self.out_channels = out_channels
+        self.bilinear = bilinear
+        self.batchnorm_cls = batchnorm_cls
+        self.data_dimensions = data_dimensions
+
+        if self.batchnorm_cls is None:
+            self.batchnorm_cls = torch.nn.BatchNorm2d if self.data_dimensions == 2 else torch.nn.BatchNorm3d
+
+        assert isinstance(in_channels, int), type(in_channels)
+        assert isinstance(out_channels, int), type(out_channels)
+        assert isinstance(bilinear, bool), type(bilinear)
+        assert issubclass(batchnorm_cls, _BatchNorm), type(batchnorm_cls)
+        assert self.data_dimensions in (2, 3), 'only 2d and 3d data is supported'
+
+        mode = 'bilinear' if self.data_dimensions == 2 else 'trilinear'
+
+        self.up = torch.nn.Upsample(scale_factor=2, mode=mode, align_corners=False)
+        self.up_ae = TinyUpAE(in_channels, self.batchnorm_cls, self.data_dimensions)
+        self.conv_block = DoubleConv(
+            in_channels+out_channels+in_channels//2, out_channels, batchnorm_cls=self.batchnorm_cls,
+            data_dimensions=self.data_dimensions)
+
+    def forward(self, x: torch.Tensor, skip_connection: torch.Tensor, /):
+        """
+        Kwargs:
+            x               <torch.Tensor>: activation/feature maps
+            skip_connection <torch.Tensor>: skip connection containing activation/feature maps
+        Returns:
+            decoder_x <torch.Tensor>, decoded <torch.Tensor>
+        """
+        assert isinstance(x, torch.Tensor), type(x)
+        assert isinstance(skip_connection, torch.Tensor), type(skip_connection)
+
+        encoded, decoded = self.up_ae(x.detach())
+        decoder_x = torch.cat((skip_connection, encoded.detach(), self.up(x)), dim=1)
+        decoder_x = self.conv_block(decoder_x)
+
+        return decoder_x, decoded
 
 
 class UnetDsv(torch.nn.Module):

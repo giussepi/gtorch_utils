@@ -74,12 +74,16 @@ Some useful pytorch snippets
 - XConv
 - Down
 - MicroAE
+- TinyAE
+- TinyUpAE
 - MicroUpAE
 - AEDown
+- AEDown2
 - Up
 - OutConv
 - UpConcat
 - AEUpConcat
+- AEUpConcat2
 - UnetDsv
 - UnetGridGatingSignal
 
