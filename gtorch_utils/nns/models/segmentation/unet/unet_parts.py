@@ -574,7 +574,7 @@ class OutConv(torch.nn.Module):
         convx = torch.nn.Conv2d if self.data_dimensions == 2 else torch.nn.Conv3d
         self.conv = convx(in_channels, out_channels, kernel_size=1)
 
-    def forward(self, x: torch.Tensor):
+    def forward(self, x: torch.Tensor, *args, **kwargs):
         return self.conv(x)
 
 
