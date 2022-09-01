@@ -26,8 +26,7 @@ class Reproducibility:
            train_dataset,
            batch_size=batch_size,
            num_workers=num_workers,
-           worker_init_fn=Reproducibility.seed_worker,
-           generator=reproducibility.get_generator(),
+           **reproducibility.dataloader_kwargs
        )
     """
 
@@ -116,3 +115,13 @@ class Reproducibility:
         g.manual_seed(self.seed_value)
 
         return g
+
+    @property
+    def dataloader_kwargs(self) -> dict:
+        """
+        Returns a dictionary with the kwargs for a DataLoader
+
+        Returns:
+            dataloader_kwargs <dict>
+        """
+        return dict(worker_init_fn=self.seed_worker, generator=self.get_generator())
