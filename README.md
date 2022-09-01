@@ -63,6 +63,9 @@ Some useful pytorch snippets
 - Perceptron
 - MLP
 
+### gtorch_utils/nns/utils
+- Reproducibility
+
 ### gtorch_utils/nns/models/segmentation
 - UNet
 - UNet_3Plus
