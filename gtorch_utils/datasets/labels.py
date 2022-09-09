@@ -4,7 +4,7 @@
 import os
 from collections import namedtuple
 
-from gutils.plot.tables import plot_color_table
+from gutils.plots import plot_color_table
 
 
 __all__ = ['Detail', 'DatasetLabelsMixin']
