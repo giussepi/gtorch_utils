@@ -51,6 +51,7 @@ Some useful pytorch snippets
 ### gtorch_utils/nns/managers/callbacks
 - Checkpoint
 - EarlyStopping
+- MemoryPrint
 - PlotTensorBoard
 
 ### gtorch_utils/nns/managers/classification
@@ -179,6 +180,7 @@ After adding new features + tests do not forget to run:
 
 ## TODO
 
+- [ ] Write tests for MemoryPrint
 - [ ] Implement double cross validation
 - [ ] Implement cross validation
 - [ ] Write more tests
