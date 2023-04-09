@@ -42,8 +42,11 @@ Some useful pytorch snippets
 - HDF5Dataset
 
 ### gtorch_utils/datasets/segmentation/datasets/
-- CarvanaDataset
 - BrainTumorDataset
+- CarvanaDataset
+- CT82Dataset [review whole module for more functionalities]
+- LiTS17Dataset, LiTS17CropDataset [review whole module for more functionalities]
+- OnlineCoNSePDataset, OfflineCoNSePDataset, SeedWorker [review whole module for more functionalities]
 
 ### gtorch_utils/nns/layers/regularizers
 - GaussianNoise
@@ -174,9 +177,19 @@ Just pass to `BasicModelMGR` the keywrod argument `tensorboard=True` and execute
 
 After adding new features + tests do not forget to run:
 
-``` bash
-./run_tests.sh
-```
+1. Get the test datasets by running
+   ```bash
+   chmod +x get_test_datasets.sh
+   ./get_test_datasets.sh
+   ```
+2. Execute all the tests
+   ```bash
+   chmod +x run_tests.sh
+   ./run_tests.sh
+   ```
+3. Commit your changes
+
+A few of our tests employs two cases from the  **NIH-TCIA CT Pancreas benchmark (CT-82)** [^1] [^2] [^3]
 
 ## TODO
 
@@ -187,3 +200,7 @@ After adding new features + tests do not forget to run:
 - [x] Save & load checkpoint
 - [x] Early stopping callback
 - [x] Plot train & val loss in tensorboard
+
+[^1]: Holger R. Roth, Amal Farag, Evrim B. Turkbey, Le Lu, Jiamin Liu, and Ronald M. Summers. (2016). Data From Pancreas-CT. The Cancer Imaging Archive. [https://doi.org/10.7937/K9/TCIA.2016.tNB1kqBU](https://doi.org/10.7937/K9/TCIA.2016.tNB1kqBU)
+[^2]: Roth HR, Lu L, Farag A, Shin H-C, Liu J, Turkbey EB, Summers RM. DeepOrgan: Multi-level Deep Convolutional Networks for Automated Pancreas Segmentation. N. Navab et al. (Eds.): MICCAI 2015, Part I, LNCS 9349, pp. 556–564, 2015.  ([paper](http://arxiv.org/pdf/1506.06448.pdf))
+[^3]: Clark K, Vendt B, Smith K, Freymann J, Kirby J, Koppel P, Moore S, Phillips S, Maffitt D, Pringle M, Tarbox L, Prior F. The Cancer Imaging Archive (TCIA): Maintaining and Operating a Public Information Repository, Journal of Digital Imaging, Volume 26, Number 6, December, 2013, pp 1045-1057. DOI: [https://doi.org/10.1007/s10278-013-9622-7](https://doi.org/10.1007/s10278-013-9622-7)
