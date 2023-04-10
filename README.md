@@ -69,6 +69,12 @@ Some useful pytorch snippets
 ### gtorch_utils/nns/mixins/checkpoints
 - CheckPointMixin
 
+### gtorch_utils/nns/mixins/constants
+- LrShedulerTrack
+
+### gtorch_utils/nns/mixins/subdatasets
+- SubDatasetsMixin
+
 ### gtorch_utils/nns/mixins/data_loggers
 - DataLoggerMixin
 - DADataLoggerMixin
