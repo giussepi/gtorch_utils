@@ -71,9 +71,20 @@ Some useful pytorch snippets
 - MLP
 
 ### gtorch_utils/nns/utils
+- MetricItem
+- Normalizer
 - Reproducibility
+- sync_batchnorm
+  + SynchronizedBatchNorm1d, SynchronizedBatchNorm2d, SynchronizedBatchNorm3d
+  + DataParallelWithCallback, patch_replication_callback
+  + get_batchnormxd_class
+
+### gtorch_utils/nns/models/backbones
+- ResNet, resnet18, resnet34, resnet50, resnet101, resnet152
+- Xception, xception
 
 ### gtorch_utils/nns/models/segmentation
+- Deeplabv3plus
 - UNet
 - UNet_3Plus
 - UNet_3Plus_DeepSup
