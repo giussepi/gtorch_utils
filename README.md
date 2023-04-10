@@ -69,6 +69,9 @@ Some useful pytorch snippets
 ### gtorch_utils/nns/mixins/checkpoints
 - CheckPointMixin
 
+### gtorch_utils/nns/mixins/exceptions
+- IniCheckpintError
+
 ### gtorch_utils/nns/models/classification
 - Perceptron
 - MLP
