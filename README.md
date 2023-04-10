@@ -51,6 +51,10 @@ Some useful pytorch snippets
 ### gtorch_utils/nns/layers/regularizers
 - GaussianNoise
 
+### gtorch_utils/nns/managers
+- ADSVModelMGR
+- ModelMGR
+
 ### gtorch_utils/nns/managers/callbacks
 - Checkpoint
 - EarlyStopping
@@ -84,6 +88,10 @@ Some useful pytorch snippets
 
 ### gtorch_utils/nns/mixins/images_types
 - CT3DNIfTIMixin
+
+### gtorch_utils/nns/mixins/managers
+- ADSVModelMGRMixin
+- ModelMGRMixin
 
 ### gtorch_utils/nns/mixins/sanity_checks
 - SanityChecksMixin
