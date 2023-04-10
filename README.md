@@ -90,8 +90,10 @@ Some useful pytorch snippets
 - CT3DNIfTIMixin
 
 ### gtorch_utils/nns/mixins/managers
-- ADSVModelMGRMixin
-- ModelMGRMixin
+- adsv
+  + ADSVModelMGRMixin
+- standard
+  + ModelMGRMixin
 
 ### gtorch_utils/nns/mixins/sanity_checks
 - SanityChecksMixin
