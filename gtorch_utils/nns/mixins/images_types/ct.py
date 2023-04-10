@@ -12,7 +12,7 @@ from gutils.images.processing import get_slices_coords
 from logzero import logger
 from tqdm import tqdm
 
-from gtorch_utils.nns.mixins.settings import USE_AMP, DISABLE_PROGRESS_BAR
+from gtorch_utils.nns.settings import USE_AMP, DISABLE_PROGRESS_BAR
 
 
 __all__ = ['CT3DNIfTIMixin']

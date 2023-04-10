@@ -7,7 +7,7 @@ import torch
 from torch.nn import functional as F
 from torch.utils.tensorboard import SummaryWriter
 
-from gtorch_utils.nns.managers.settings import USE_AMP
+from gtorch_utils.nns.settings import USE_AMP
 from gtorch_utils.nns.managers.callbacks import MaskPlotter
 from gtorch_utils.nns.managers.exceptions import ModelMGRImageChannelsError
 from gtorch_utils.nns.mixins.managers import ADSVModelMGRMixin

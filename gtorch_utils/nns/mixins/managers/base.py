@@ -28,8 +28,8 @@ from gtorch_utils.nns.mixins.checkpoints import CheckPointMixin
 from gtorch_utils.nns.mixins.constants import LrShedulerTrack
 from gtorch_utils.nns.mixins.data_loggers import DataLoggerMixin
 from gtorch_utils.nns.mixins.sanity_checks import SanityChecksMixin
-from gtorch_utils.nns.mixins.settings import USE_AMP, DISABLE_PROGRESS_BAR
 from gtorch_utils.nns.mixins.subdatasets import SubDatasetsMixin
+from gtorch_utils.nns.settings import USE_AMP, DISABLE_PROGRESS_BAR
 from gtorch_utils.nns.utils.sync_batchnorm import patch_replication_callback
 
 

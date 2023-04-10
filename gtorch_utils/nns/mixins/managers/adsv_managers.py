@@ -13,7 +13,7 @@ from tqdm import tqdm
 from gtorch_utils.nns.managers.callbacks import Checkpoint, EarlyStopping, MetricEvaluator
 from gtorch_utils.nns.mixins.constants import LrShedulerTrack
 from gtorch_utils.nns.mixins.managers.base import BaseModelMGR
-from gtorch_utils.nns.mixins.settings import USE_AMP, DISABLE_PROGRESS_BAR
+from gtorch_utils.nns.settings import USE_AMP, DISABLE_PROGRESS_BAR
 
 
 __all__ = ['ADSVModelMGRMixin']
