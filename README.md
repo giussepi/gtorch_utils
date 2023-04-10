@@ -54,8 +54,11 @@ Some useful pytorch snippets
 ### gtorch_utils/nns/managers/callbacks
 - Checkpoint
 - EarlyStopping
+- MaskPlotter
 - MemoryPrint
+- MetricEvaluator
 - PlotTensorBoard
+- TrainingPlotter
 
 ### gtorch_utils/nns/managers/classification
 - BasicModelMGR
