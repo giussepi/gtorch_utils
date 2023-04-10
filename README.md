@@ -76,6 +76,9 @@ Some useful pytorch snippets
 ### gtorch_utils/nns/mixins/exceptions
 - IniCheckpintError
 
+### gtorch_utils/nns/mixins/images_types
+- CT3DNIfTIMixin
+
 ### gtorch_utils/nns/mixins/sanity_checks
 - SanityChecksMixin
 - WeightsChangingSanityChecksMixin
