@@ -69,8 +69,17 @@ Some useful pytorch snippets
 ### gtorch_utils/nns/mixins/checkpoints
 - CheckPointMixin
 
+### gtorch_utils/nns/mixins/data_loggers
+- DataLoggerMixin
+- DADataLoggerMixin
+
 ### gtorch_utils/nns/mixins/exceptions
 - IniCheckpintError
+
+### gtorch_utils/nns/mixins/torchmetrics
+- TorchMetricsMixin
+- DATorchMetricsMixin
+- ModularTorchMetricsMixin
 
 ### gtorch_utils/nns/models/classification
 - Perceptron
