@@ -83,6 +83,9 @@ Some useful pytorch snippets
 - ResNet, resnet18, resnet34, resnet50, resnet101, resnet152
 - Xception, xception
 
+### gtorch_utils/nns/models/mixins
+- InitMixin
+
 ### gtorch_utils/nns/models/segmentation
 - Deeplabv3plus
 - UNet
