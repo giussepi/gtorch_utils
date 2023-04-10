@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-""" gtorch_utils/nns/settings.py """
+""" gtorch_utils/nns/managers/settings.py """
 
 try:
     import settings
