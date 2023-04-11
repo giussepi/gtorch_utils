@@ -9,6 +9,7 @@ import time
 from typing import Union
 
 import numpy as np
+from logzero import logger
 from gtorch_utils.constants import DB
 from gutils.datasets.utils.split import TrainValTestSplit
 from gutils.decorators import timing
@@ -18,6 +19,7 @@ from gutils.images.images import NIfTI, DICOM, ProNIfTI
 from gutils.numpy_.numpy_ import scale_using_general_min_max_values
 from PIL import Image
 from skimage.exposure import equalize_adapthist
+from tabulate import tabulate
 from tqdm import tqdm
 
 from gtorch_utils.datasets.segmentation.datasets.ct82.constants import DICOM_MIN_VAL, DICOM_MAX_VAL
@@ -150,7 +152,7 @@ class CT82MGR:
         for labels_file, cts_folder in tqdm(zip(labels_files, cts_folders)):
             self._process_labels_cts(labels_file, cts_folder)
 
-    def get_insights(self):
+    def get_insights(self, *, verbose: bool = False):
         """
         Browse all the ct82 DICOM and NIfTI files and returns the min/max DICOM values,
         total DICOMs analized, min/max number of NIfTI slices with data/masks, total NIfTIs analyzed,
@@ -192,6 +194,20 @@ class CT82MGR:
             subject_dicoms = len(glob.glob(os.path.join(subject_dicoms_folder, '**/*.dcm'), recursive=True))
             min_dicoms_per_subject = min(min_dicoms_per_subject, subject_dicoms)
             max_dicoms_per_subject = max(max_dicoms_per_subject, subject_dicoms)
+
+        if verbose:
+            table = [
+                ['', 'value'],
+                ['min_dicom_val', min_dicom_val],
+                ['max_dicom_val', max_dicom_val],
+                ['dicoms_analized', dicoms_analized],
+                ['min_slices_with_data', min_slices_with_data],
+                ['max_slices_with_data', max_slices_with_data],
+                ['niftis_analyzed', min_dicom_val],
+                ['min_dicoms_per_subject', min_dicoms_per_subject],
+                ['max_dicoms_per_subject', max_dicoms_per_subject]
+            ]
+            logger.info('\n%s', str(tabulate(table, headers="firstrow")))
 
         return min_dicom_val, max_dicom_val, dicoms_analized, min_slices_with_data, max_slices_with_data, \
             niftis_analyzed, min_dicoms_per_subject, max_dicoms_per_subject
