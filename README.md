@@ -4,25 +4,66 @@ Some useful pytorch snippets
 
 ## Installation
 
-1. Install package
+<!-- If you haven't done it yet. [Install the right pytorch version](https://pytorch.org/) for your CUDA vesion. To see your which CUDA version you have just run `nvcc -V`. -->
+This vesion has been tested with Pytorch 1.10.0, but it should be safe to use it with Pytorch<2.0.
 
-	Add to your requirements file:
+1. Install Pytorch 1.10.0 folowing the instructions provided on the page [pytorch.org/get-started/previous-versions/#v1100](https://pytorch.org/get-started/previous-versions/#v1100).
 
-	``` bash
-	gtorch_utils @ https://github.com/giussepi/gtorch_utils/tarball/main
-	```
+2. Install [OpenSlide](https://openslide.org/download/).
 
-	or run
+### Package installation
 
-	``` bash
-	pip install git+git://github.com/giussepi/gtorch_utils.git --use-feature=2020-resolver --no-cache-dir
+Add to your requirements file:
 
-	# or
+``` bash
+# use the latest version
 
-	pip install https://github.com/giussepi/gtorch_utils/tarball/main --use-feature=2020-resolver --no-cache-dir
-	```
+gtorch_utils @ https://github.com/giussepi/gtorch_utils/tarball/main
 
-2. If you haven't done it yet. [Install the right pytorch version](https://pytorch.org/) for your CUDA vesion. To see your which CUDA version you have just run `nvcc -V`.
+# or use a specific release (format 1)
+
+gutils @ https://github.com/giussepi/gtorch_utils/archive/refs/tags/v0.2.0.tar.gz
+
+# or use a specific release (format 2)
+
+gutils @ git+https://github.com/giussepi/gtorch_utils.git@v0.2.0
+
+```
+
+or install it directly:
+
+
+``` bash
+pip install git+git://github.com/giussepi/gtorch_utils.git --use-feature=2020-resolver --no-cache-dir
+
+# or
+
+pip install https://github.com/giussepi/gtorch_utils/tarball/main --use-feature=2020-resolver --no-cache-dir
+```
+### Development installation
+
+1. Clone this repository
+
+2. Modify or add new modules/features with their respective tests
+
+3. Get the test datasets by running
+
+   ```bash
+   chmod +x get_test_datasets.sh
+   ./get_test_datasets.sh
+   ```
+
+4. Execute all the tests
+
+   ```bash
+   chmod +x run_tests.sh
+   ./run_tests.sh
+   ```
+
+5. If all the tests pass, commit your changes
+
+A few of our tests employs two cases from the  **NIH-TCIA CT Pancreas benchmark (CT-82)** [^1] [^2] [^3]
+
 
 ## Tools available
 ### gtorch_utils/constants
@@ -228,26 +269,9 @@ Just pass to `BasicModelMGR` the keywrod argument `tensorboard=True` and execute
 **Note:** If you installed this app as a package then you may want to copy the [run_tensorboard.sh](https://github.com/giussepi/gtorch_utils/blob/main/run_tensorboard.sh) script to your project root or just run `tensorboard --logdir=runs` every time you want to see your training results on the TensorBoard interface. To do so, just open [localhost:6006](http://localhost:6006/) on your browser.
 
 
-## Development
-
-After adding new features + tests do not forget to run:
-
-1. Get the test datasets by running
-   ```bash
-   chmod +x get_test_datasets.sh
-   ./get_test_datasets.sh
-   ```
-2. Execute all the tests
-   ```bash
-   chmod +x run_tests.sh
-   ./run_tests.sh
-   ```
-3. Commit your changes
-
-A few of our tests employs two cases from the  **NIH-TCIA CT Pancreas benchmark (CT-82)** [^1] [^2] [^3]
-
 ## TODO
 
+- [ ] Make it compatible with torch 2.0
 - [ ] Write tests for MemoryPrint
 - [ ] Implement double cross validation
 - [ ] Implement cross validation
