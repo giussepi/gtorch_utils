@@ -22,11 +22,11 @@ gtorch_utils @ https://github.com/giussepi/gtorch_utils/tarball/main
 
 # or use a specific release (format 1)
 
-gutils @ https://github.com/giussepi/gtorch_utils/archive/refs/tags/v0.2.0.tar.gz
+gutils @ https://github.com/giussepi/gtorch_utils/archive/refs/tags/v0.1.0.tar.gz
 
 # or use a specific release (format 2)
 
-gutils @ git+https://github.com/giussepi/gtorch_utils.git@v0.2.0
+gutils @ git+https://github.com/giussepi/gtorch_utils.git@v0.1.0
 
 ```
 
