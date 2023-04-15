@@ -5,7 +5,7 @@ Some useful pytorch snippets
 ## Installation
 
 <!-- If you haven't done it yet. [Install the right pytorch version](https://pytorch.org/) for your CUDA vesion. To see your which CUDA version you have just run `nvcc -V`. -->
-This vesion has been tested with Pytorch 1.10.0, but it should be safe to use it with Pytorch<2.0.
+This version has been tested with Pytorch 1.10.0, but using it with Pytorch<2.0 should be safe.
 
 1. Install Pytorch 1.10.0 folowing the instructions provided on the page [pytorch.org/get-started/previous-versions/#v1100](https://pytorch.org/get-started/previous-versions/#v1100).
 
