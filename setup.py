@@ -19,7 +19,7 @@ def _parse_requirements(filename: str) -> List[str]:
 setuptools.setup(
     # name="gtorch-utils-pkg-giussepi",  # Replace with your own username
     name="gtorch_utils",
-    version="0.1.0",
+    version="0.2.0",
     author="Giussepi Lopez",
     author_email="giussepexy@gmail.com",
     description="Several pytorch snippets",
