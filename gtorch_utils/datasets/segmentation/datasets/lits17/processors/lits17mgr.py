@@ -99,9 +99,9 @@ class LiTS17MGR:
         #       work over continuos data always; otherwise, subsequent
         #       resample operations will not work properly
         if self.only_liver:
-            labels.ndarray = (labels.ndarray > 0).astype(np.int)
+            labels.ndarray = (labels.ndarray > 0).astype(int)
         elif self.only_lesion:
-            labels.ndarray = (labels.ndarray > 1).astype(np.int)
+            labels.ndarray = (labels.ndarray > 1).astype(int)
 
         image = NIfTI(labels_file.replace('segmentation', 'volume'))
 
@@ -192,9 +192,9 @@ class LiTS17MGR:
                 img_counter += 1
             else:
                 slices_with_label_1 = \
-                    (nifti.ndarray == 1).astype(np.int).sum(axis=0).sum(axis=0).astype(np.bool).sum()
+                    (nifti.ndarray == 1).astype(int).sum(axis=0).sum(axis=0).astype(bool).sum()
                 slices_with_label_2 = \
-                    (nifti.ndarray == 2).astype(np.int).sum(axis=0).sum(axis=0).astype(np.bool).sum()
+                    (nifti.ndarray == 2).astype(int).sum(axis=0).sum(axis=0).astype(bool).sum()
                 min_slices_with_label_1 = min(min_slices_with_label_1, slices_with_label_1)
                 min_slices_with_label_2 = min(min_slices_with_label_2, slices_with_label_2)
                 max_slices_with_label_1 = max(max_slices_with_label_1, slices_with_label_1)
