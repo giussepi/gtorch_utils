@@ -8,13 +8,13 @@ from collections import defaultdict
 
 import numpy as np
 import torch
-from gtorch_utils.datasets.segmentation import DatasetTemplate
 from gutils.images.images import NIfTI
 from gutils.numpy_.numpy_ import scale_using_general_min_max_values
 from logzero import logger
 
+from gtorch_utils.datasets.segmentation import DatasetTemplate
 from gtorch_utils.datasets.segmentation.datasets.lits17.constants import CT_MAX_VAL, CT_MIN_VAL
-from gtorch_utils.datasets.segmentation.datasets.lits17.settings import TRANSFORMS
+from gtorch_utils.datasets.segmentation.datasets.lits17.settings import LITS17_TRANSFORMS as TRANSFORMS
 
 
 __all__ = ['BaseLiTS17Dataset']
@@ -56,7 +56,7 @@ class BaseLiTS17Dataset(DatasetTemplate):
             original_masks    <bool>: If original_masks == cotraining_mask == True, then both the original
                                       and cotraining masks are returned.
                                       Default False
-            transform <callable, None>: Data augmentation transforms. See ct82.settings.
+            transform <callable, None>: Data augmentation transforms. See gtorch_utils.datasets.segmentation.datasets.lits17.settings.
                                       Defaullt None
             cache             <bool>: If True all the images will be cached. Default False
         """

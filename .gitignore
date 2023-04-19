@@ -133,3 +133,6 @@ dmypy.json
 
 # test datasets
 gutils_test_datasets
+
+# local config files
+/settings.py

@@ -13,54 +13,64 @@ This version has been tested with Pytorch 1.10.0, but using it with Pytorch<2.0 
 
 ### Package installation
 
-Add to your requirements file:
+1. Install it by:
 
-``` bash
-# use the latest version
+   Adding it to your requirements file:
 
-gtorch_utils @ https://github.com/giussepi/gtorch_utils/tarball/main
+	``` bash
+	# use the latest version
 
-# or use a specific release (format 1)
+	gtorch_utils @ https://github.com/giussepi/gtorch_utils/tarball/main
 
-gutils @ https://github.com/giussepi/gtorch_utils/archive/refs/tags/v0.1.0.tar.gz
+	# or use a specific release (format 1)
 
-# or use a specific release (format 2)
+	gutils @ https://github.com/giussepi/gtorch_utils/archive/refs/tags/v0.1.0.tar.gz
 
-gutils @ git+https://github.com/giussepi/gtorch_utils.git@v0.1.0
+	# or use a specific release (format 2)
 
-```
+	gutils @ git+https://github.com/giussepi/gtorch_utils.git@v0.1.0
 
-or install it directly:
+	```
 
+	Or installing it directly:
 
-``` bash
-pip install git+git://github.com/giussepi/gtorch_utils.git --use-feature=2020-resolver --no-cache-dir
+	``` bash
+	pip install git+git://github.com/giussepi/gtorch_utils.git --use-feature=2020-resolver --no-cache-dir
 
-# or
+	# or
 
-pip install https://github.com/giussepi/gtorch_utils/tarball/main --use-feature=2020-resolver --no-cache-dir
-```
+	pip install https://github.com/giussepi/gtorch_utils/tarball/main --use-feature=2020-resolver --no-cache-dir
+	```
+
+2. If you want to modify some default configuration values (e.g. for CT-82 and LiTS17 processing). Copy and the content from [settings.py.template](settings.py.template) into your project `settings.py` and update it appropriately (especially `PROJECT_PATH`, `CT82_SAVING_PATH`, `LITS17_SAVING_PATH` and `LITS17_CONFIG`)
+
 ### Development installation
 
 1. Clone this repository
 
-2. Modify or add new modules/features with their respective tests
+2. If you want to modify some default configuration values (e.g. for CT-82 and LiTS17 processing). Make a copy of the configuration file, review it thoroughly and update it properly (especially `PROJECT_PATH`, `CT82_SAVING_PATH`, `LITS17_SAVING_PATH` and `LITS17_CONFIG`)
 
-3. Get the test datasets by running
+   ```bash
+   cp settings.py.template settings.py
+   ```
+
+3. Modify or add new modules/features with their respective tests
+
+4. Get the test datasets by running
 
    ```bash
    chmod +x get_test_datasets.sh
    ./get_test_datasets.sh
    ```
 
-4. Execute all the tests
+5. Execute all the tests
 
    ```bash
    chmod +x run_tests.sh
    ./run_tests.sh
    ```
 
-5. If all the tests pass, commit your changes
+6. If all the tests pass, commit your changes
 
 A few of our tests employs two cases from the  **NIH-TCIA CT Pancreas benchmark (CT-82)** [^1] [^2] [^3]
 

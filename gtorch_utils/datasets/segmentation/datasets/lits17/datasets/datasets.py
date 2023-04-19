@@ -69,7 +69,7 @@ class LiTS17CropDataset(BaseLiTS17Dataset):
             original_masks    <bool>: If original_masks == cotraining_mask == True, then both the original
                                       and cotraining masks are returned.
                                       Default False
-            transform <callable, None>: Data augmentation transforms. See ct82.settings.
+            transform <callable, None>: Data augmentation transforms. See gtorch_utils.datasets.segmentation.datasets.lits17.settings.
                                       Defaullt None
             cache             <bool>: If True all the images will be cached. Default False
         """
