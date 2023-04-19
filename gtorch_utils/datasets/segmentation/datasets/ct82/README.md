@@ -31,7 +31,7 @@ from gtorch_utils.datasets.segmentation.datasets.ct82.processors import CT82MGR
 # PROCESSING DATASET ######################################################
 
 # Make sure to update the settings.py by:
-# 1. Copying and the content from [settings.py.template](../../../../../settings.py.template) into your project `settings.py`
+# 1. Copying and the content from ../../../../../settings.py.template into your project `settings.py`
 # 2. Setting the right path for `PROJECT_PATH` and `CT82_SAVING_PATH`
 # 3. If you wish, you can tailor the provided configuration to your needs
 

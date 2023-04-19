@@ -21,7 +21,7 @@ from gtorch_utils.datasets.segmentation.datasets.lits17.processors import LiTS17
 # GENERATING DATASET  #####################################################
 
 # Make sure to update the settings.py by:
-# 1. Copying and the content from [settings.py.template](../../../../../settings.py.template) into your project `settings.py`
+# 1. Copying and the content from ../../../../../settings.py.template into your project `settings.py`
 # 2. Setting the right path for `PROJECT_PATH` and `LITS17_SAVING_PATH`
 # 3. Setting LITS17_CONFIG = LiTS17DBConfig.LESION
 # 4. If you wish, you can tailor the provided configuration to your needs
